@@ -1,6 +1,6 @@
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { HeroUIProvider, Card, CardBody, Button } from '@heroui/react';
+import { ThemeProvider } from 'next-themes';
 import { FaLaptop } from 'react-icons/fa';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
@@ -13,7 +13,8 @@ import EquipmentPage from './components/EquipmentPage';
 import ContactPage from './components/ContactPage';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ChatBot from './components/ChatBot';
+import GlobalDraggableChat from './components/GlobalDraggableChat';
+import { ChatProvider } from './contexts/ChatContext';
 
 // ScrollToTop component
 const ScrollToTop = () => {
@@ -77,30 +78,33 @@ const HomePage = () => (
     </section>
     
     <Contact />
-    <ChatBot />
+
   </main>
 );
 
 function App() {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="light">
+    <ThemeProvider attribute="class" defaultTheme="light">
       <HeroUIProvider>
-        <Router>
-          <ScrollToTop />
-          <div className="min-h-screen bg-background text-foreground">
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/servicios" element={<ServicesPage />} />
-              <Route path="/quien-soy" element={<AboutPage />} />
-              <Route path="/mi-equipo" element={<EquipmentPage />} />
-              <Route path="/contacto" element={<ContactPage />} />
-            </Routes>
-            <Footer />
-          </div>
-        </Router>
+        <ChatProvider>
+          <Router>
+            <ScrollToTop />
+            <div className="min-h-screen bg-background text-foreground">
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/servicios" element={<ServicesPage />} />
+                <Route path="/quien-soy" element={<AboutPage />} />
+                <Route path="/mi-equipo" element={<EquipmentPage />} />
+                <Route path="/contacto" element={<ContactPage />} />
+              </Routes>
+              <Footer />
+              <GlobalDraggableChat />
+            </div>
+          </Router>
+        </ChatProvider>
       </HeroUIProvider>
-    </NextThemesProvider>
+    </ThemeProvider>
   );
 }
 
