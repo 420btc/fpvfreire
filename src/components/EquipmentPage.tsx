@@ -82,6 +82,11 @@ const equipmentCategories = [
         name: 'Fujifilm XT2',
         specs: 'APSC, 4K/30fps, S-Log3',
         icon: <FaCamera className="text-2xl text-orange-400" />
+      },
+      {
+        name: 'DJI Goggles 2',
+        specs: '100fps 1080p, Visión del dron y resultado previo',
+        icon: <FaVideo className="text-2xl text-orange-400" />
       }
     ]
   },
