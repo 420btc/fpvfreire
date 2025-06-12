@@ -11,7 +11,7 @@ const About = () => {
       title: "Villa Aurora"
     },
     {
-      src: "/videos/villa_sunset.mp4",
+      src: "/videos/VillaSunset.mp4",
       title: "Villa Sunset"
     }
   ];
