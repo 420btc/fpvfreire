@@ -3,6 +3,7 @@ import { Card, CardBody, Button, Input, Textarea } from '@heroui/react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import emailjs from 'emailjs-com';
 
 // Mapbox token
 mapboxgl.accessToken = 'pk.eyJ1IjoiNDIwYnRjIiwiYSI6ImNtOTN3ejBhdzByNjgycHF6dnVmeHl2ZTUifQ.Utq_q5wN6DHwpkn6rcpZdw';
@@ -38,6 +39,23 @@ const ContactPage = () => {
   const map = useRef<mapboxgl.Map | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // EmailJS configuration
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  
+  // EmailJS service configuration
+  const SERVICE_ID = 'service_k65jk6c' ; // Reemplaza con tu Service ID real
+  const TEMPLATE_ADMIN = 'template_1exdmsp'; // Template que te llega a ti
+  const TEMPLATE_CLIENT = 'template_tnzvsui'; // Template que le llega al cliente
+  const PUBLIC_KEY = 'T0NH6Fx_YFfNyGSCO'; // Tu nueva Public Key
 
   // Fetch weather data
   useEffect(() => {
@@ -160,6 +178,77 @@ const ContactPage = () => {
       }
     };
   }, []);
+  
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    
+    try {
+      // Prepare template parameters for admin email
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        to_name: 'Freire FPV', // Tu nombre o empresa
+        to_email: 'carlosfreire777@gmail.com', // Tu email donde quieres recibir los mensajes
+        reply_to: formData.email
+      };
+      
+      // Send email to admin (you)
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ADMIN,
+        templateParams,
+        PUBLIC_KEY
+      );
+      
+      // Send confirmation email to client
+      const clientParams = {
+        from_name: 'Freire FPV',
+        from_email: 'carlosfreire777@gmail.com', // Tu email como remitente
+        to_name: formData.name,
+        to_email: formData.email, // Email del cliente
+        subject: `Confirmación: ${formData.subject}`,
+        original_message: formData.message
+      };
+      
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_CLIENT,
+        clientParams,
+        PUBLIC_KEY
+      );
+      
+      setSubmitStatus('success');
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+      
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const getWeatherColor = (rain: number, wind: number) => {
     if (rain >= 1 || wind >= 20) return 'bg-red-500';
@@ -206,7 +295,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground">Teléfono</h3>
-                      <p className="text-default-600">+34 123 456 789</p>
+                      <p className="text-default-600">+34 685 78 83 25</p>
                     </div>
                   </div>
 
@@ -216,7 +305,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground">Email</h3>
-                      <p className="text-default-600">info@freirefpv.com</p>
+                      <p className="text-default-600">fpvfcarlos@gmail.com</p>
                     </div>
                   </div>
 
@@ -237,8 +326,8 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground">Horario</h3>
-                      <p className="text-default-600">Lunes a Viernes: 9:00 - 18:00</p>
-                      <p className="text-default-600">Sábados: 10:00 - 14:00</p>
+                      <p className="text-default-600">Lunes a Viernes: 8:00 - 19:00</p>
+                      <p className="text-default-600">Sábados: 9:00 - 14:00</p>
                       <p className="text-default-600">Domingos: Cerrado</p>
                     </div>
                   </div>
@@ -265,49 +354,82 @@ const ContactPage = () => {
                   Envíame un mensaje
                 </h2>
                 
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <Input
+                    name="name"
                     label="Nombre"
                     placeholder="Tu nombre completo"
                     variant="bordered"
                     className="w-full"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
                   />
                   
                   <Input
+                    name="email"
                     label="Email"
                     type="email"
                     placeholder="tu@email.com"
                     variant="bordered"
                     className="w-full"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
                   />
                   
                   <Input
+                    name="phone"
                     label="Teléfono"
                     placeholder="+34 123 456 789"
                     variant="bordered"
                     className="w-full"
+                    value={formData.phone}
+                    onChange={handleInputChange}
                   />
                   
                   <Input
+                    name="subject"
                     label="Asunto"
                     placeholder="Asunto del mensaje"
                     variant="bordered"
                     className="w-full"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
                   />
                   
                   <Textarea
+                    name="message"
                     label="Mensaje"
                     placeholder="Cuéntame sobre tu proyecto..."
                     variant="bordered"
                     minRows={4}
                     className="w-full"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
                   />
                   
+                  {submitStatus === 'success' && (
+                    <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                      ¡Mensaje enviado correctamente! Te responderemos pronto.
+                    </div>
+                  )}
+                  
+                  {submitStatus === 'error' && (
+                    <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                      Error al enviar el mensaje. Por favor, inténtalo de nuevo.
+                    </div>
+                  )}
+                  
                   <Button 
+                    type="submit"
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3"
                     size="lg"
+                    disabled={isSubmitting}
                   >
-                    ENVIAR MENSAJE
+                    {isSubmitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}
                   </Button>
                 </form>
               </CardBody>
