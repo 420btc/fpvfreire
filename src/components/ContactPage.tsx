@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaTwitter, FaInstagram, FaYoutube, FaLaptop } from 'react-icons/fa';
 import emailjs from 'emailjs-com';
+import ChatBotContact from './ChatBotContact';
 
 // Mapbox token
 mapboxgl.accessToken = 'pk.eyJ1IjoiNDIwYnRjIiwiYSI6ImNtOTN3ejBhdzByNjgycHF6dnVmeHl2ZTUifQ.Utq_q5wN6DHwpkn6rcpZdw';
@@ -768,6 +769,9 @@ const ContactPage = () => {
           </Button>
         </div>
       </section>
+      
+      {/* Chat Bot para la página de contacto */}
+      <ChatBotContact />
     </div>
   );
 };

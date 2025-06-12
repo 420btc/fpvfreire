@@ -9,9 +9,8 @@ interface Message {
   timestamp: Date;
 }
 
-const ChatBot = () => {
+const ChatBotContact = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -23,22 +22,6 @@ const ChatBot = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Detectar cuando el usuario llega al final de la página
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      
-      // Mostrar el botón cuando el usuario esté cerca del final (90% del scroll)
-      const scrollPercentage = (scrollTop + windowHeight) / documentHeight;
-      setIsVisible(scrollPercentage > 0.9);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Auto-scroll al final de los mensajes
   useEffect(() => {
@@ -129,24 +112,22 @@ const ChatBot = () => {
     }
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed right-2 md:right-6 top-1/2 transform -translate-y-1/2 z-50">
       {/* Botón flotante */}
       {!isOpen && (
         <Button
           isIconOnly
-          className="w-16 h-16 bg-orange-500 hover:bg-orange-600 text-white shadow-lg animate-bounce"
+          className="w-12 h-12 md:w-16 md:h-16 bg-orange-500 hover:bg-orange-600 text-white shadow-lg"
           onPress={() => setIsOpen(true)}
         >
-          <Icon icon="mdi:chat" width={32} height={32} />
+          <Icon icon="mdi:chat" width={24} height={24} className="md:w-8 md:h-8" />
         </Button>
       )}
 
       {/* Ventana de chat */}
       {isOpen && (
-        <Card className="w-96 h-96 shadow-2xl border border-orange-200">
+        <Card className="w-80 h-80 md:w-96 md:h-96 shadow-2xl border border-orange-200">
           <CardHeader className="bg-orange-500 text-white p-4 flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Icon icon="mdi:drone" width={24} height={24} />
@@ -216,13 +197,13 @@ const ChatBot = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   className="flex-1"
-                  disabled={isLoading}
+                  disabled={isLoading || messages.length >= 11}
                 />
                 <Button
                   isIconOnly
                   className="bg-orange-500 hover:bg-orange-600 text-white"
                   onPress={sendMessage}
-                  disabled={isLoading || !inputMessage.trim()}
+                  disabled={isLoading || !inputMessage.trim() || messages.length >= 11}
                 >
                   <Icon icon="mdi:send" width={20} height={20} />
                 </Button>
@@ -235,4 +216,4 @@ const ChatBot = () => {
   );
 };
 
-export default ChatBot;
+export default ChatBotContact;
