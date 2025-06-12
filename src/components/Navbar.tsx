@@ -68,13 +68,13 @@ const NavbarComponent = () => {
               className="p-2"
             >
               <div className="flex flex-col justify-center items-center w-6 h-6">
-                <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
+                <span className={`bg-foreground block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
                   isMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-0.5'
                 }`}></span>
-                <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${
+                <span className={`bg-foreground block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${
                   isMenuOpen ? 'opacity-0' : 'opacity-100'
                 }`}></span>
-                <span className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
+                <span className={`bg-foreground block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
                   isMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-0.5'
                 }`}></span>
               </div>

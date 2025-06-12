@@ -508,6 +508,73 @@ const ContactPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Previsión Meteorológica - Málaga</h2>
           
+          {/* Current Conditions */}
+          <div className="max-w-5xl mx-auto mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {/* Current Weather */}
+              <Card className="bg-black text-white border border-orange-500">
+                <CardBody className="p-4 text-center">
+                  <h3 className="text-lg font-bold text-orange-500 mb-2">Clima Actual</h3>
+                  {loading ? (
+                    <div className="text-sm opacity-80">Cargando...</div>
+                  ) : weatherData.length > 0 ? (
+                    <>
+                      <div className="flex justify-center mb-2">
+                        <img 
+                          src={getWeatherIcon(weatherData[0].weather[0].icon)}
+                          alt={weatherData[0].weather[0].description}
+                          className="w-12 h-12 object-contain"
+                        />
+                      </div>
+                      <div className="text-2xl font-bold mb-1">{Math.round(weatherData[0].main.temp)}°C</div>
+                      <div className="text-sm mb-2 capitalize">{weatherData[0].weather[0].description}</div>
+                      <div className="text-xs space-y-1">
+                        <div>💧 Humedad: {weatherData[0].main.humidity}%</div>
+                        <div>💨 Viento: {(weatherData[0].wind.speed * 3.6).toFixed(0)} km/h</div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-sm opacity-80">No hay datos disponibles</div>
+                  )}
+                </CardBody>
+              </Card>
+
+              {/* Flight Conditions */}
+              <Card className="bg-black text-white border border-orange-500">
+                <CardBody className="p-4 text-center">
+                  <h3 className="text-lg font-bold text-orange-500 mb-2">Condiciones de Vuelo</h3>
+                  {loading ? (
+                    <div className="text-sm opacity-80">Evaluando...</div>
+                  ) : weatherData.length > 0 ? (
+                    <>
+                      {(() => {
+                        const rainAmount = weatherData[0].rain?.['3h'] || 0;
+                        const isOptimal = rainAmount < 1;
+                        
+                        return (
+                          <>
+                            <div className={`text-2xl font-bold mb-2 ${
+                              isOptimal ? 'text-green-400' : 'text-red-400'
+                            }`}>
+                              {isOptimal ? '✅ ÓPTIMAS' : '⚠️ ADVERSAS'}
+                            </div>
+                            <div className="text-3xl font-bold mt-4">
+                              💧 {rainAmount.toFixed(1)}mm
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </>
+                  ) : (
+                    <div className="text-sm opacity-80">No se puede evaluar</div>
+                  )}
+                </CardBody>
+              </Card>
+            </div>
+          </div>
+
+          <h3 className="text-2xl font-bold text-center mb-8">Previsión de 7 Días - Málaga</h3>
+          
           <div className="max-w-5xl mx-auto">
             <div className="flex flex-wrap justify-center gap-3 md:gap-4">
               {loading ? (
