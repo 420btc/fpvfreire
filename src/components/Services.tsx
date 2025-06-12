@@ -26,6 +26,11 @@ const services = [
     title: "Inspecciones Técnicas",
     description: "Análisis detallado y seguro de estructuras de difícil acceso",
     image: "/images/inspeccion.jpg"
+  },
+  {
+    title: "Deportes",
+    description: "Cobertura dinámica de eventos deportivos desde el aire",
+    image: "/images/deportes.jpg"
   }
 ];
 
@@ -36,7 +41,7 @@ const Services = () => {
         <h2 className="text-3xl font-bold text-center mb-12">Servicios Destacados</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
           {services.map((service, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col">
+            <Card key={index} className={`hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col ${index === 5 ? 'md:hidden' : ''}`}>
               <CardBody className="p-0">
                 <Image
                   src={index === 0 ? "/images/villa_nueva.png" : service.image}
