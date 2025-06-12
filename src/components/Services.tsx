@@ -36,17 +36,19 @@ const Services = () => {
         <h2 className="text-3xl font-bold text-center mb-12">Servicios Destacados</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
           {services.map((service, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-300 w-full">
+            <Card key={index} className="hover:shadow-lg transition-shadow duration-300 w-full h-full flex flex-col">
               <CardBody className="p-0">
                 <Image
                   src={index === 0 ? "/images/villa_nueva.png" : service.image}
                   alt={service.title}
-                  className="w-full h-32 sm:h-40 md:h-48 object-cover"
+                  className="w-full h-32 sm:h-40 md:h-56 lg:h-60 object-cover"
                 />
               </CardBody>
-              <CardFooter className="flex-col items-start p-2 md:p-4">
-                <h3 className="text-sm md:text-base font-semibold text-center w-full">{service.title}</h3>
-                <p className="text-xs md:text-sm text-default-500 text-center w-full mt-1">{service.description}</p>
+              <CardFooter className="flex-col items-start p-2 md:p-5 lg:p-6 flex-grow justify-between">
+                <div className="flex flex-col h-full justify-between">
+                  <h3 className="text-sm md:text-lg lg:text-xl font-semibold text-center w-full">{service.title}</h3>
+                  <p className="text-xs md:text-base lg:text-lg text-default-500 text-center w-full mt-1 flex-grow flex items-center justify-center">{service.description}</p>
+                </div>
               </CardFooter>
             </Card>
           ))}

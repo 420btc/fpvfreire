@@ -1,6 +1,7 @@
-import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HeroUIProvider, Card, CardBody, Button } from '@heroui/react';
+import { FaLaptop } from 'react-icons/fa';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -18,6 +19,50 @@ const HomePage = () => (
     <Hero />
     <About />
     <Services />
+    
+    {/* Otros Servicios */}
+    <section className="py-16 bg-content2">
+      <div className="container mx-auto px-4">
+        <div className="text-center max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+            Descubre mis otros servicios
+          </h2>
+          
+          <Card className="bg-content1 hover:shadow-lg transition-shadow duration-300">
+            <CardBody className="p-8">
+              <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-8">
+                <div className="bg-orange-500 p-6 rounded-full">
+                  <FaLaptop className="text-white text-4xl" />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-foreground mb-4">
+                    Desarrollo Full Stack
+                  </h3>
+                  <p className="text-default-600 text-lg mb-6">
+                    Además de los servicios de drones, también me dedico al desarrollo web y aplicaciones. 
+                    Descubre mi portfolio de proyectos tecnológicos.
+                  </p>
+                  <a 
+                    href="https://portfoliodos.vercel.app/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block"
+                  >
+                    <Button 
+                      size="lg"
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
+                    >
+                      VER PORTFOLIO
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+    </section>
+    
     <Contact />
   </main>
 );
