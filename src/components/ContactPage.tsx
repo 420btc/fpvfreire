@@ -823,6 +823,7 @@ const ContactPage = () => {
           <Button 
             size="lg"
             className="bg-white text-orange-500 hover:bg-gray-100 font-bold px-8 py-3 text-lg"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             CONTÁCTAME AHORA
           </Button>
