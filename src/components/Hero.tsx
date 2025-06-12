@@ -30,22 +30,27 @@ const Hero = () => {
   }, [showVideo]);
 
   useEffect(() => {
-    if (!showVideo && gifs.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentMedia((prev) => {
-          const nextIndex = (prev + 1) % gifs.length;
-          // Si completamos un ciclo de gifs, mostrar el video
-          if (nextIndex === 0 && !gifCycleComplete) {
+    if (!showVideo && !gifCycleComplete && gifs.length > 0) {
+      const img = new Image();
+      img.src = gifs[currentMedia];
+      
+      const handleGifLoad = () => {
+        // Esperar a que el gif termine de reproducirse (estimado 2-3 segundos)
+        setTimeout(() => {
+          const nextIndex = currentMedia + 1;
+          if (nextIndex >= gifs.length) {
             setGifCycleComplete(true);
-            setTimeout(() => setShowVideo(true), 3000);
+            setShowVideo(true);
+          } else {
+            setCurrentMedia(nextIndex);
           }
-          return nextIndex;
-        });
-      }, 3000); // Cambiar gif cada 3 segundos
+        }, 2500); // Tiempo estimado para que termine el gif
+      };
 
-      return () => clearInterval(interval);
+      img.addEventListener('load', handleGifLoad);
+      return () => img.removeEventListener('load', handleGifLoad);
     }
-  }, [showVideo, gifs.length, gifCycleComplete]);
+  }, [showVideo, gifs.length, gifCycleComplete, currentMedia]);
 
   return (
     <div className="relative h-screen">
