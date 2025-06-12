@@ -31,12 +31,12 @@ const equipmentCategories = [
     description: 'Mi flota de drones FPV para grabaciones aéreas',
     items: [
       {
-        name: 'Cineliog 25 V2 DJI O3 A6',
+        name: 'Cinelog 25 V2 DJI O3',
         specs: 'Cinewhoop 2.5", 4K/120fps, DJI O3',
         icon: <FaPlane className="text-2xl text-orange-400" />
       },
       {
-        name: 'Flywoo LR4 DJI O3 A5',
+        name: 'Flywoo LR4 DJI O3',
         specs: 'Long Range, Sub250g, 4K/60fps, 30min vuelo',
         icon: <FaWifi className="text-2xl text-orange-400" />
       },
@@ -46,13 +46,13 @@ const equipmentCategories = [
         icon: <FaPlane className="text-2xl text-orange-400" />
       },
       {
-        name: 'Mantis 5 DJI O3 E5',
+        name: 'Manta 5 DJI O3 6S',
         specs: 'Racing 5", DJI O3, Alta velocidad',
         icon: <MdSpeed className="text-2xl text-orange-400" />
       },
       {
-        name: 'Chimera 7 DJI O3 E5',
-        specs: 'Long Range 7", DJI O3, Máximo alcance',
+        name: 'Chimera 7 DJI O3 6S',
+        specs: 'Long Range 7", DJI O3, Máximo alcance 30km',
         icon: <FaWifi className="text-2xl text-orange-400" />
       }
     ]
@@ -64,7 +64,7 @@ const equipmentCategories = [
     description: 'Cámaras de alta resolución para todas las necesidades',
     items: [
       {
-        name: 'GoPro Hero 12 Black',
+        name: 'GoPro Hero 12 Black Naked',
         specs: '5.3K/60fps, HyperSmooth 6.0',
         icon: <MdHighQuality className="text-2xl text-orange-400" />
       },
@@ -79,8 +79,8 @@ const equipmentCategories = [
         icon: <MdPrecisionManufacturing className="text-2xl text-orange-400" />
       },
       {
-        name: 'Sony FX3',
-        specs: 'Full Frame, 4K/120fps, S-Log3',
+        name: 'Fujifilm XT2',
+        specs: 'APSC, 4K/30fps, S-Log3',
         icon: <FaCamera className="text-2xl text-orange-400" />
       }
     ]
