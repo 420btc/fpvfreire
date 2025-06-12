@@ -153,6 +153,50 @@ const ContactPage = () => {
           .setLngLat([-4.4214, 36.7213])
           .addTo(map.current!);
 
+        // Add service zone points
+        const serviceZones = [
+          [-4.8857, 36.5108], // Marbella
+          [-4.4998, 36.6203], // Torremolinos
+          [-4.5487, 36.5988], // Benalmádena
+          [-4.6298, 36.5470], // Fuengirola
+          [-4.5593, 37.0179], // Antequera
+          [-5.1662, 36.7429], // Ronda
+          [-4.3514, 36.7213], // El Palo, Málaga
+          [-3.8740, 36.7520]  // Nerja
+        ];
+
+        // Add source for service zone points
+        map.current?.addSource('service-zones', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: serviceZones.map((coords, index) => ({
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: coords
+              },
+              properties: {
+                id: index
+              }
+            }))
+          }
+        });
+
+        // Add layer for service zone points
+        map.current?.addLayer({
+          id: 'service-zones-points',
+          type: 'circle',
+          source: 'service-zones',
+          paint: {
+            'circle-radius': 6,
+            'circle-color': '#ff6b35',
+            'circle-opacity': 0.8,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 1
+          }
+        });
+
         // Fly to Málaga with animation
         setTimeout(() => {
           map.current?.flyTo({
