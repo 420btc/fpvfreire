@@ -1,4 +1,5 @@
 import { Card, CardBody, CardFooter, Image } from "@heroui/react";
+import { Link } from 'react-router-dom';
 
 const services = [
   {
@@ -53,9 +54,12 @@ const Services = () => {
         
         {/* Botón Ver más */}
         <div className="flex justify-center mt-8 md:mt-12">
-          <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-full text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg">
+          <Link 
+            to="/servicios"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-full text-base md:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg inline-block"
+          >
             Ver más
-          </button>
+          </Link>
         </div>
       </div>
     </section>

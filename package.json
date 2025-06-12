@@ -13,11 +13,13 @@
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "2.7.9",
     "@iconify/react": "latest",
+    "@types/react-router-dom": "^5.3.3",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^11.0.3",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^7.6.2",
     "source-map-js": "^1.2.1"
   },
   "devDependencies": {
