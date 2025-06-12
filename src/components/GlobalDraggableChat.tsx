@@ -224,7 +224,7 @@ const GlobalDraggableChat: React.FC = () => {
               <Icon icon="mdi:drone" width={24} height={24} />
               <div>
                 <h3 className="font-bold">Asistente FPV</h3>
-                <p className="text-xs opacity-90">Experto en drones - Arrastrable</p>
+                <p className="text-xs opacity-90">Experto en drones</p>
               </div>
             </div>
             <div className="flex space-x-1">
