@@ -13,6 +13,7 @@ import EquipmentPage from './components/EquipmentPage';
 import ContactPage from './components/ContactPage';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ChatBot from './components/ChatBot';
 
 // ScrollToTop component
 const ScrollToTop = () => {
@@ -76,6 +77,7 @@ const HomePage = () => (
     </section>
     
     <Contact />
+    <ChatBot />
   </main>
 );
 
