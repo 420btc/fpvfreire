@@ -8,7 +8,20 @@ export default {
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sonsie': ['Sonsie One', 'cursive'],
+      },
+      animation: {
+        'spin-reverse': 'spin-reverse 3s linear infinite',
+      },
+      keyframes: {
+        'spin-reverse': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(-360deg)' },
+        },
+      },
+    },
   },
   darkMode: "class",
   plugins: [

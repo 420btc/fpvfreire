@@ -13,7 +13,7 @@ const NavbarComponent = () => {
       <Navbar isBordered>
         <NavbarBrand>
           <Logo />
-          <p className="font-bold text-inherit">Freire FPV</p>
+          <p className="font-bold text-inherit font-sonsie ml-4">Freire FPV</p>
         </NavbarBrand>
         
         {/* Desktop Menu */}
@@ -142,13 +142,30 @@ const NavbarComponent = () => {
   );
 };
 
-const Logo = () => (
-  <svg className="w-8 h-8" viewBox="0 0 32 32">
-    <circle cx="8" cy="8" r="6" fill="#FF6600" />
-    <circle cx="24" cy="8" r="6" fill="#FF6600" />
-    <circle cx="8" cy="24" r="6" fill="#FF6600" />
-    <circle cx="24" cy="24" r="6" fill="#FF6600" />
-  </svg>
-);
+const Logo = () => {
+  const [isReversed, setIsReversed] = useState(false);
+
+  return (
+    <svg 
+      className={`w-8 h-8 transition-transform duration-300 ${
+        isReversed ? 'animate-spin-reverse' : 'animate-spin'
+      }`}
+      viewBox="0 0 32 32"
+      onMouseEnter={() => setIsReversed(true)}
+      onMouseLeave={() => setIsReversed(false)}
+      onClick={() => setIsReversed(!isReversed)}
+      style={{
+        animationDuration: '3s',
+        animationIterationCount: 'infinite',
+        animationTimingFunction: 'linear'
+      }}
+    >
+      <circle cx="8" cy="8" r="6" fill="#FF6600" />
+      <circle cx="24" cy="8" r="6" fill="#FF6600" />
+      <circle cx="8" cy="24" r="6" fill="#FF6600" />
+      <circle cx="24" cy="24" r="6" fill="#FF6600" />
+    </svg>
+  );
+};
 
 export default NavbarComponent;
