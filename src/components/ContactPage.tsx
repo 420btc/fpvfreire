@@ -48,22 +48,21 @@ const ContactPage = () => {
         );
         const data: WeatherForecast = await response.json();
         
-        // Get 7 days starting from Monday
-        const today = new Date();
-        const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
-        const daysUntilMonday = currentDay === 0 ? 1 : (8 - currentDay) % 7;
-        
-        // Find Monday's data and get 7 consecutive days
-        const mondayIndex = Math.max(0, daysUntilMonday * 8);
+        // Get real data: one forecast per day (every 8th item = 24 hours)
+        // OpenWeather API returns forecasts every 3 hours, so every 8th item is roughly the same time next day
         const dailyForecasts = [];
         
-        for (let i = 0; i < 7; i++) {
-          const dataIndex = mondayIndex + (i * 8);
-          if (dataIndex < data.list.length) {
-            dailyForecasts.push(data.list[dataIndex]);
-          } else {
-            // If we don't have enough future data, use the last available
-            dailyForecasts.push(data.list[data.list.length - 1]);
+        for (let i = 0; i < data.list.length && dailyForecasts.length < 7; i += 8) {
+          dailyForecasts.push(data.list[i]);
+        }
+        
+        // If we don't have 7 full days, fill with remaining data
+        if (dailyForecasts.length < 7) {
+          const remaining = 7 - dailyForecasts.length;
+          const lastIndex = dailyForecasts.length * 8;
+          
+          for (let i = 0; i < remaining && (lastIndex + i) < data.list.length; i++) {
+            dailyForecasts.push(data.list[lastIndex + i]);
           }
         }
         
@@ -387,10 +386,10 @@ const ContactPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Previsión Meteorológica - Málaga</h2>
           
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
               {loading ? (
-                <div className="col-span-7 text-center py-8">
+                <div className="w-full text-center py-8">
                   <p>Cargando previsión meteorológica...</p>
                 </div>
               ) : (
@@ -400,22 +399,24 @@ const ContactPage = () => {
                   const colorClass = getWeatherColor(rainAmount, windSpeed);
                   
                   return (
-                    <Card key={index} className={`${colorClass} text-white`}>
-                      <CardBody className="p-4 text-center">
-                        <h3 className="font-bold mb-2">{formatDate(day.dt)}</h3>
-                        <img 
-                          src={getWeatherIcon(day.weather[0].icon)}
-                          alt={day.weather[0].description}
-                          className="w-12 h-12 mx-auto mb-2"
-                        />
-                        <p className="text-sm mb-1">{Math.round(day.main.temp)}°C</p>
+                    <Card key={index} className={`${colorClass} text-white w-32 md:w-36 flex-shrink-0`}>
+                      <CardBody className="p-3 md:p-4 text-center">
+                        <h3 className="font-bold mb-2 text-sm md:text-base">{formatDate(day.dt)}</h3>
+                        <div className="flex justify-center mb-2">
+                          <img 
+                            src={getWeatherIcon(day.weather[0].icon)}
+                            alt={day.weather[0].description}
+                            className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                          />
+                        </div>
+                        <p className="text-sm md:text-base font-semibold mb-1">{Math.round(day.main.temp)}°C</p>
                         <p className="text-xs mb-1">💧 {rainAmount.toFixed(1)}mm</p>
-                        <p className="text-xs">💨 {windSpeed.toFixed(0)}km/h</p>
-                        <div className="mt-2">
+                        <p className="text-xs mb-2">💨 {windSpeed.toFixed(0)}km/h</p>
+                        <div className="mt-1">
                           {rainAmount < 1 && windSpeed < 20 ? (
-                            <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">Óptimo</span>
+                            <span className="text-xs bg-white bg-opacity-20 px-1.5 py-0.5 rounded">Óptimo</span>
                           ) : (
-                            <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">Condiciones adversas</span>
+                            <span className="text-xs bg-white bg-opacity-20 px-1.5 py-0.5 rounded">Adversas</span>
                           )}
                         </div>
                       </CardBody>
