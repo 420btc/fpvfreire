@@ -256,6 +256,10 @@ const ContactPage = () => {
   };
 
   const getWeatherIcon = (iconCode: string) => {
+    // Asegurarse de que siempre usamos la versión diurna del icono para el sol (01d)
+    if (iconCode === '01n') {
+      return 'https://openweathermap.org/img/wn/01d@2x.png';
+    }
     return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
   };
 
