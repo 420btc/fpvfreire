@@ -13,7 +13,9 @@ const NavbarComponent = () => {
       <Navbar isBordered>
         <NavbarBrand>
           <Logo />
-          <p className="font-bold text-inherit font-sonsie ml-4">Freire FPV</p>
+          <RouterLink to="/" className="font-bold text-inherit font-sonsie ml-4 hover:text-orange-500 transition-colors">
+            Freire FPV
+          </RouterLink>
         </NavbarBrand>
         
         {/* Desktop Menu */}
