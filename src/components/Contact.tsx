@@ -1,16 +1,88 @@
 import React from 'react';
 import { Button, Input, Textarea } from "@heroui/react";
+import { useState } from 'react';
 import emailjs from 'emailjs-com';
 
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  
+  // EmailJS service configuration (misma configuración que ContactPage)
+  const SERVICE_ID = 'service_k65jk6c';
+  const TEMPLATE_ADMIN = 'template_1exdmsp';
+  const TEMPLATE_CLIENT = 'template_tnzvsui';
+  const PUBLIC_KEY = 'T0NH6Fx_YFfNyGSCO';
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', e.target as HTMLFormElement, 'YOUR_USER_ID')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    
+    try {
+      // Prepare template parameters for admin email
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: '', // No hay campo de teléfono en este formulario
+        subject: 'Contacto desde página principal',
+        message: formData.message,
+        to_name: 'Freire FPV',
+        to_email: 'carlosfreire777@gmail.com',
+        reply_to: formData.email
+      };
+      
+      // Send email to admin (you)
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ADMIN,
+        templateParams,
+        PUBLIC_KEY
+      );
+      
+      // Send confirmation email to client
+      const clientParams = {
+        from_name: 'Freire FPV',
+        from_email: 'carlosfreire777@gmail.com',
+        to_name: formData.name,
+        to_email: formData.email,
+        subject: 'Confirmación: Contacto desde página principal',
+        original_message: formData.message
+      };
+      
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_CLIENT,
+        clientParams,
+        PUBLIC_KEY
+      );
+      
+      setSubmitStatus('success');
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        message: ''
       });
+      
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -22,23 +94,53 @@ const Contact = () => {
             label="Nombre"
             placeholder="Tu nombre"
             name="name"
+            value={formData.name}
+            onChange={handleInputChange}
             className="mb-4"
+            isRequired
           />
           <Input
             label="Email"
             placeholder="tu@email.com"
             name="email"
             type="email"
+            value={formData.email}
+            onChange={handleInputChange}
             className="mb-4"
+            isRequired
           />
           <Textarea
             label="Mensaje"
             placeholder="Tu mensaje"
             name="message"
+            value={formData.message}
+            onChange={handleInputChange}
             className="mb-4"
+            minRows={4}
+            isRequired
           />
-          <Button type="submit" color="primary" className="w-full">
-            Enviar Mensaje
+          
+          {/* Status Messages */}
+          {submitStatus === 'success' && (
+            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+              ¡Mensaje enviado correctamente! Te contactaremos pronto.
+            </div>
+          )}
+          
+          {submitStatus === 'error' && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              Error al enviar el mensaje. Por favor, inténtalo de nuevo.
+            </div>
+          )}
+          
+          <Button 
+            type="submit" 
+            color="primary" 
+            className="w-full bg-orange-500 hover:bg-orange-600"
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
           </Button>
         </form>
       </div>
