@@ -1,0 +1,538 @@
+import { useEffect, useRef, useState } from 'react';
+import { Card, CardBody, Button, Input, Textarea } from '@heroui/react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+
+// Mapbox token
+mapboxgl.accessToken = 'pk.eyJ1IjoiNDIwYnRjIiwiYSI6ImNtOTN3ejBhdzByNjgycHF6dnVmeHl2ZTUifQ.Utq_q5wN6DHwpkn6rcpZdw';
+
+// OpenWeather API key
+const OPENWEATHER_API_KEY = '5ae0c9a3137234e18e032e3d6024629e';
+
+interface WeatherData {
+  dt: number;
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  weather: {
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  wind: {
+    speed: number;
+  };
+  rain?: {
+    '3h': number;
+  };
+}
+
+interface WeatherForecast {
+  list: WeatherData[];
+}
+
+const ContactPage = () => {
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch weather data
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/forecast?q=Malaga,ES&appid=${OPENWEATHER_API_KEY}&units=metric&lang=es`
+        );
+        const data: WeatherForecast = await response.json();
+        
+        // Get 7 days starting from Monday
+        const today = new Date();
+        const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const daysUntilMonday = currentDay === 0 ? 1 : (8 - currentDay) % 7;
+        
+        // Find Monday's data and get 7 consecutive days
+        const mondayIndex = Math.max(0, daysUntilMonday * 8);
+        const dailyForecasts = [];
+        
+        for (let i = 0; i < 7; i++) {
+          const dataIndex = mondayIndex + (i * 8);
+          if (dataIndex < data.list.length) {
+            dailyForecasts.push(data.list[dataIndex]);
+          } else {
+            // If we don't have enough future data, use the last available
+            dailyForecasts.push(data.list[data.list.length - 1]);
+          }
+        }
+        
+        setWeatherData(dailyForecasts);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchWeatherData();
+  }, []);
+
+  // Initialize map
+  useEffect(() => {
+    if (map.current || !mapContainer.current) return;
+
+    console.log('Initializing Mapbox map...');
+    console.log('Mapbox token:', mapboxgl.accessToken);
+    console.log('Map container:', mapContainer.current);
+
+    try {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        center: [0, 20], // Start from a wider view
+        zoom: 2
+      });
+
+      map.current.on('load', () => {
+        console.log('Map loaded successfully');
+        
+        // Add service area circle first
+        map.current?.addSource('service-area', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-4.4214, 36.7213]
+            },
+            properties: {}
+          }
+        });
+
+        map.current?.addLayer({
+          id: 'service-area-circle',
+          type: 'circle',
+          source: 'service-area',
+          paint: {
+            'circle-radius': {
+              stops: [
+                [8, 20],
+                [12, 80],
+                [16, 200]
+              ],
+              base: 2
+            },
+            'circle-color': '#ff6b35',
+            'circle-opacity': 0.3,
+            'circle-stroke-color': '#ff6b35',
+            'circle-stroke-width': 2
+          }
+        });
+
+        // Add marker for Málaga
+        new mapboxgl.Marker({ color: '#ff6b35' })
+          .setLngLat([-4.4214, 36.7213])
+          .addTo(map.current!);
+
+        // Fly to Málaga with animation
+        setTimeout(() => {
+          map.current?.flyTo({
+            center: [-4.4214, 36.7213],
+            zoom: 11,
+            duration: 3000,
+            essential: true
+          });
+        }, 1000);
+      });
+
+      map.current.on('error', (e) => {
+        console.error('Mapbox error:', e);
+      });
+
+    } catch (error) {
+      console.error('Error initializing map:', error);
+    }
+
+    return () => {
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
+    };
+  }, []);
+
+  const getWeatherColor = (rain: number, wind: number) => {
+    if (rain >= 1 || wind >= 20) return 'bg-red-500';
+    return 'bg-green-500';
+  };
+
+  const getWeatherIcon = (iconCode: string) => {
+    return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  };
+
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    return days[date.getDay()];
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="py-16 bg-gradient-to-b from-content1 to-background">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contacta conmigo</h1>
+          <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto">
+            Estoy aquí para ayudarte con tu próximo proyecto audiovisual
+          </p>
+        </div>
+      </section>
+
+      {/* Contact Information & Form */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Contact Information */}
+            <Card className="bg-content1">
+              <CardBody className="p-8">
+                <h2 className="text-2xl font-bold text-white mb-6 bg-gray-800 p-4 rounded-lg">
+                  Información de Contacto
+                </h2>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-orange-500 p-3 rounded-full">
+                      <FaPhone className="text-white text-lg" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Teléfono</h3>
+                      <p className="text-default-600">+34 123 456 789</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-orange-500 p-3 rounded-full">
+                      <FaEnvelope className="text-white text-lg" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Email</h3>
+                      <p className="text-default-600">info@freirefpv.com</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-orange-500 p-3 rounded-full">
+                      <FaMapMarkerAlt className="text-white text-lg" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Ubicación</h3>
+                      <p className="text-default-600">Málaga, Costa del Sol</p>
+                      <p className="text-default-600">Operamos en toda Andalucía</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-orange-500 p-3 rounded-full">
+                      <FaClock className="text-white text-lg" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">Horario</h3>
+                      <p className="text-default-600">Lunes a Viernes: 9:00 - 18:00</p>
+                      <p className="text-default-600">Sábados: 10:00 - 14:00</p>
+                      <p className="text-default-600">Domingos: Cerrado</p>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4 pt-4">
+                    <div className="bg-blue-600 p-3 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
+                      <FaFacebook className="text-white text-lg" />
+                    </div>
+                    <div className="bg-blue-400 p-3 rounded-full cursor-pointer hover:bg-blue-500 transition-colors">
+                      <FaTwitter className="text-white text-lg" />
+                    </div>
+                    <div className="bg-pink-600 p-3 rounded-full cursor-pointer hover:bg-pink-700 transition-colors">
+                      <FaInstagram className="text-white text-lg" />
+                    </div>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Contact Form */}
+            <Card className="bg-content1">
+              <CardBody className="p-8">
+                <h2 className="text-2xl font-bold text-orange-500 mb-6">
+                  Envíame un mensaje
+                </h2>
+                
+                <form className="space-y-6">
+                  <Input
+                    label="Nombre"
+                    placeholder="Tu nombre completo"
+                    variant="bordered"
+                    className="w-full"
+                  />
+                  
+                  <Input
+                    label="Email"
+                    type="email"
+                    placeholder="tu@email.com"
+                    variant="bordered"
+                    className="w-full"
+                  />
+                  
+                  <Input
+                    label="Teléfono"
+                    placeholder="+34 123 456 789"
+                    variant="bordered"
+                    className="w-full"
+                  />
+                  
+                  <Input
+                    label="Asunto"
+                    placeholder="Asunto del mensaje"
+                    variant="bordered"
+                    className="w-full"
+                  />
+                  
+                  <Textarea
+                    label="Mensaje"
+                    placeholder="Cuéntame sobre tu proyecto..."
+                    variant="bordered"
+                    minRows={4}
+                    className="w-full"
+                  />
+                  
+                  <Button 
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3"
+                    size="lg"
+                  >
+                    ENVIAR MENSAJE
+                  </Button>
+                </form>
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Area */}
+      <section className="py-16 bg-content1">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Área de Servicio</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Map */}
+            <div className="lg:col-span-2">
+              <div 
+                ref={mapContainer} 
+                className="w-full h-96 rounded-lg shadow-lg"
+                style={{ minHeight: '400px' }}
+              />
+            </div>
+            
+            {/* Service Areas List */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-orange-500 mb-4">Zonas de Servicio</h3>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Málaga capital</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Costa del Sol</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Marbella</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Torremolinos</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Benalmádena</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Fuengirola</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Antequera</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span>Ronda</span>
+                </div>
+              </div>
+              
+              <div className="mt-6 p-4 bg-orange-100 rounded-lg">
+                <h4 className="font-semibold text-orange-800 mb-2">Información sobre condiciones meteorológicas</h4>
+                <p className="text-sm text-orange-700">
+                  Consulta las condiciones meteorológicas antes de planificar tu sesión. 
+                  Las condiciones de viento y lluvia pueden afectar la calidad de las grabaciones.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Weather Forecast */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Previsión Meteorológica - Málaga</h2>
+          
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+              {loading ? (
+                <div className="col-span-7 text-center py-8">
+                  <p>Cargando previsión meteorológica...</p>
+                </div>
+              ) : (
+                weatherData.map((day, index) => {
+                  const rainAmount = day.rain?.['3h'] || 0;
+                  const windSpeed = day.wind.speed * 3.6; // Convert m/s to km/h
+                  const colorClass = getWeatherColor(rainAmount, windSpeed);
+                  
+                  return (
+                    <Card key={index} className={`${colorClass} text-white`}>
+                      <CardBody className="p-4 text-center">
+                        <h3 className="font-bold mb-2">{formatDate(day.dt)}</h3>
+                        <img 
+                          src={getWeatherIcon(day.weather[0].icon)}
+                          alt={day.weather[0].description}
+                          className="w-12 h-12 mx-auto mb-2"
+                        />
+                        <p className="text-sm mb-1">{Math.round(day.main.temp)}°C</p>
+                        <p className="text-xs mb-1">💧 {rainAmount.toFixed(1)}mm</p>
+                        <p className="text-xs">💨 {windSpeed.toFixed(0)}km/h</p>
+                        <div className="mt-2">
+                          {rainAmount < 1 && windSpeed < 20 ? (
+                            <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">Óptimo</span>
+                          ) : (
+                            <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">Condiciones adversas</span>
+                          )}
+                        </div>
+                      </CardBody>
+                    </Card>
+                  );
+                })
+              )}
+            </div>
+            
+            <div className="mt-8 text-center">
+              <p className="text-sm text-default-600 mb-4">
+                * Las condiciones se evalúan según lluvia (mm) y viento (km/h)
+              </p>
+              <div className="flex justify-center space-x-6 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-green-500 rounded"></div>
+                  <span>Óptimo: &lt;1mm lluvia, &lt;20km/h viento</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-red-500 rounded"></div>
+                  <span>Condiciones adversas: ≥1mm lluvia o ≥20km/h viento</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-content1">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Preguntas Frecuentes</h2>
+          
+          <div className="max-w-4xl mx-auto space-y-6">
+            <Card className="bg-background">
+              <CardBody className="p-6">
+                <h3 className="text-lg font-bold text-orange-500 mb-2">
+                  ¿Qué es un drone FPV y en qué se diferencia de los drones normales?
+                </h3>
+                <p className="text-default-700">
+                  Un drone FPV (First Person View) permite al piloto ver en tiempo real lo que ve la cámara del drone, 
+                  ofreciendo un control más preciso y tomas cinematográficas únicas. Son ideales para grabaciones 
+                  dinámicas y seguimientos de acción.
+                </p>
+              </CardBody>
+            </Card>
+
+            <Card className="bg-background">
+              <CardBody className="p-6">
+                <h3 className="text-lg font-bold text-orange-500 mb-2">
+                  ¿Cuánto tiempo tarda la entrega de un proyecto finalizado?
+                </h3>
+                <p className="text-default-700">
+                  El tiempo de entrega depende de la complejidad del proyecto. Proyectos simples pueden estar listos 
+                  en 3-5 días, mientras que producciones más complejas pueden requerir 1-2 semanas.
+                </p>
+              </CardBody>
+            </Card>
+
+            <Card className="bg-background">
+              <CardBody className="p-6">
+                <h3 className="text-lg font-bold text-orange-500 mb-2">
+                  ¿Se necesitan permisos especiales para grabar con drones?
+                </h3>
+                <p className="text-default-700">
+                  Sí, dependiendo de la ubicación y tipo de grabación. Nosotros nos encargamos de todos los permisos 
+                  necesarios y cumplimos con la normativa AESA vigente.
+                </p>
+              </CardBody>
+            </Card>
+
+            <Card className="bg-background">
+              <CardBody className="p-6">
+                <h3 className="text-lg font-bold text-orange-500 mb-2">
+                  ¿Qué formatos de archivo recibiré con mis grabaciones?
+                </h3>
+                <p className="text-default-700">
+                  Entregamos los archivos en formato 4K MP4 para uso general, y también podemos proporcionar 
+                  archivos RAW o en otros formatos específicos según tus necesidades.
+                </p>
+              </CardBody>
+            </Card>
+
+            <Card className="bg-background">
+              <CardBody className="p-6">
+                <h3 className="text-lg font-bold text-orange-500 mb-2">
+                  ¿Se pueden realizar grabaciones en interiores?
+                </h3>
+                <p className="text-default-700">
+                  Sí, utilizamos drones cinewhoop especialmente diseñados para espacios interiores, 
+                  con protecciones que permiten volar de forma segura cerca de personas y objetos.
+                </p>
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            ¿Tienes alguna pregunta que no encuentras aquí?
+          </h2>
+          <p className="text-xl text-white opacity-90 mb-8 max-w-2xl mx-auto">
+            No dudes en contactarme directamente. Estaré encantado de ayudarte con tu proyecto.
+          </p>
+          <Button 
+            size="lg"
+            className="bg-white text-orange-500 hover:bg-gray-100 font-bold px-8 py-3 text-lg"
+          >
+            CONTÁCTAME AHORA
+          </Button>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default ContactPage;

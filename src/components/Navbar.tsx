@@ -2,28 +2,11 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from '@heroui/
 import { useTheme } from 'next-themes';
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 const NavbarComponent = () => {
   const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-  
-  const isHomePage = location.pathname === '/';
-  
-  const scrollToSection = (sectionId: string) => {
-    if (!isHomePage) {
-      // Si no estamos en la página principal, navegar primero
-      window.location.href = `/#${sectionId}`;
-      return;
-    }
-    
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMenuOpen(false);
-  };
 
   return (
     <>
@@ -56,12 +39,9 @@ const NavbarComponent = () => {
             </RouterLink>
           </NavbarItem>
           <NavbarItem>
-            <button 
-              onClick={() => scrollToSection('contacto')} 
-              className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors"
-            >
+            <RouterLink to="/contacto" className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors">
               Contacto
-            </button>
+            </RouterLink>
           </NavbarItem>
         </NavbarContent>
         
@@ -135,12 +115,13 @@ const NavbarComponent = () => {
             >
               Mi Equipo
             </RouterLink>
-            <button 
-              onClick={() => scrollToSection('contacto')} 
-              className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors text-left"
+            <RouterLink 
+              to="/contacto" 
+              className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
             >
               Contacto
-            </button>
+            </RouterLink>
             
             {/* Theme Toggle - Mobile */}
             <div className="pt-4 border-t border-gray-600">
