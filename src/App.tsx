@@ -1,7 +1,8 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { HeroUIProvider, Card, CardBody, Button } from '@heroui/react';
 import { FaLaptop } from 'react-icons/fa';
+import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -12,6 +13,17 @@ import EquipmentPage from './components/EquipmentPage';
 import ContactPage from './components/ContactPage';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+
+// ScrollToTop component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 // Home Page Component
 const HomePage = () => (
@@ -72,6 +84,7 @@ function App() {
     <NextThemesProvider attribute="class" defaultTheme="light">
       <HeroUIProvider>
         <Router>
+          <ScrollToTop />
           <div className="min-h-screen bg-background text-foreground">
             <Navbar />
             <Routes>
