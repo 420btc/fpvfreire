@@ -1,40 +1,51 @@
-import { Button } from "@heroui/react";
 import { useState, useEffect, useRef } from "react";
+import { Button } from "@heroui/react";
 
 const Hero = () => {
   const [currentMedia, setCurrentMedia] = useState(0);
-  const [showVideo, setShowVideo] = useState(true);
+  const [showVideo, setShowVideo] = useState(false); // Empezar con gifs
+  const [gifCycleComplete, setGifCycleComplete] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
   // Lista de gifs disponibles
   const gifs = [
-    "/gifs/4d7~mv2.gif",
-    "/gifs/f-mv2.gif"
+    "/gifs/gif2.gif",
+    "/gifs/gif4.gif",
+    "/gifs/gif3.gif"
   ];
 
   useEffect(() => {
     const video = videoRef.current;
-    if (video) {
+    if (video && showVideo) {
       const handleVideoEnd = () => {
+        // Después del video, reiniciar el ciclo de gifs
         setShowVideo(false);
-        // Iniciar ciclo de gifs
+        setGifCycleComplete(false);
         setCurrentMedia(0);
       };
 
       video.addEventListener('ended', handleVideoEnd);
       return () => video.removeEventListener('ended', handleVideoEnd);
     }
-  }, []);
+  }, [showVideo]);
 
   useEffect(() => {
     if (!showVideo && gifs.length > 0) {
       const interval = setInterval(() => {
-        setCurrentMedia((prev) => (prev + 1) % gifs.length);
+        setCurrentMedia((prev) => {
+          const nextIndex = (prev + 1) % gifs.length;
+          // Si completamos un ciclo de gifs, mostrar el video
+          if (nextIndex === 0 && !gifCycleComplete) {
+            setGifCycleComplete(true);
+            setTimeout(() => setShowVideo(true), 3000);
+          }
+          return nextIndex;
+        });
       }, 3000); // Cambiar gif cada 3 segundos
 
       return () => clearInterval(interval);
     }
-  }, [showVideo, gifs.length]);
+  }, [showVideo, gifs.length, gifCycleComplete]);
 
   return (
     <div className="relative h-screen">

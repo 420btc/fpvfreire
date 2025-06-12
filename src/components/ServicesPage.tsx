@@ -6,7 +6,7 @@ const servicesData = [
     title: "Casas/Villas",
     description: "Captura tus mejores de propiedades con drones aéreos de alta resolución. Ideal para inmobiliarias, arquitectos y propietarios que desean destacar sus propiedades.",
     image: "/images/villa_nueva.png",
-    price: "Desde 50€",
+    price: "Desde 150€",
     features: ["Fotos aéreas HD", "Video promocional", "Edición profesional"]
   },
   {
@@ -27,7 +27,7 @@ const servicesData = [
     title: "Colegios",
     description: "Servicios especializados para centros educativos. Documentación de instalaciones, eventos deportivos y actividades académicas desde una perspectiva única.",
     image: "/images/colegio.jpg",
-    price: "Desde 60€",
+    price: "Desde 100€",
     features: ["Documentación escolar", "Eventos deportivos", "Promoción institucional"]
   },
   {
@@ -48,14 +48,14 @@ const servicesData = [
     title: "Bodas y Celebraciones Especiales",
     description: "Inmortaliza los momentos más especiales de tu vida con tomas aéreas únicas. Bodas, aniversarios y celebraciones familiares desde una perspectiva mágica.",
     image: "/images/bodas_celebraciones.jpg",
-    price: "Desde 150€",
+    price: "Desde 200€",
     features: ["Ceremonia completa", "Fotos románticas", "Video cinematográfico"]
   },
   {
     title: "Publicidad y Marketing",
     description: "Contenido visual para promocionar tu negocio, producto o servicio. Campañas publicitarias con impacto visual garantizado.",
     image: "/images/blicidad.jpg",
-    price: "Desde 200€",
+    price: "Desde 60€",
     features: ["Campañas publicitarias", "Contenido para redes", "Branding empresarial"]
   },
   {
