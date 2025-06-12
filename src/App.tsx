@@ -7,6 +7,7 @@ import About from './components/About';
 import Services from './components/Services';
 import ServicesPage from './components/ServicesPage';
 import AboutPage from './components/AboutPage';
+import EquipmentPage from './components/EquipmentPage';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -31,6 +32,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/servicios" element={<ServicesPage />} />
               <Route path="/quien-soy" element={<AboutPage />} />
+              <Route path="/mi-equipo" element={<EquipmentPage />} />
             </Routes>
             <Footer />
           </div>

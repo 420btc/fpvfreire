@@ -51,6 +51,11 @@ const NavbarComponent = () => {
             </RouterLink>
           </NavbarItem>
           <NavbarItem>
+            <RouterLink to="/mi-equipo" className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors">
+              Mi Equipo
+            </RouterLink>
+          </NavbarItem>
+          <NavbarItem>
             <button 
               onClick={() => scrollToSection('contacto')} 
               className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors"
@@ -122,6 +127,13 @@ const NavbarComponent = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Quien soy
+            </RouterLink>
+            <RouterLink 
+              to="/mi-equipo" 
+              className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Mi Equipo
             </RouterLink>
             <button 
               onClick={() => scrollToSection('contacto')} 
