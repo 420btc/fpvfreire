@@ -6,6 +6,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Services from './components/Services';
 import ServicesPage from './components/ServicesPage';
+import AboutPage from './components/AboutPage';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -29,6 +30,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/servicios" element={<ServicesPage />} />
+              <Route path="/quien-soy" element={<AboutPage />} />
             </Routes>
             <Footer />
           </div>

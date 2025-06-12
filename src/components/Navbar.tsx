@@ -1,4 +1,4 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from "@heroui/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button } from '@heroui/react';
 import { useTheme } from 'next-themes';
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
@@ -46,12 +46,9 @@ const NavbarComponent = () => {
             </RouterLink>
           </NavbarItem>
           <NavbarItem>
-            <button 
-              onClick={() => scrollToSection('quien-soy')} 
-              className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors"
-            >
+            <RouterLink to="/quien-soy" className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors">
               Quien soy
-            </button>
+            </RouterLink>
           </NavbarItem>
           <NavbarItem>
             <button 
@@ -119,12 +116,13 @@ const NavbarComponent = () => {
             >
               Servicios
             </RouterLink>
-            <button 
-              onClick={() => scrollToSection('quien-soy')} 
-              className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors text-left"
+            <RouterLink 
+              to="/quien-soy" 
+              className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
             >
               Quien soy
-            </button>
+            </RouterLink>
             <button 
               onClick={() => scrollToSection('contacto')} 
               className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors text-left"
