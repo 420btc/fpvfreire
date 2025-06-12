@@ -54,41 +54,28 @@ const About = () => {
                   Your browser does not support the video tag.
                 </video>
                 
-                {/* Botones de navegación */}
-                <div className="absolute inset-y-0 left-0 flex items-center">
-                  <Button
-                    isIconOnly
-                    className="ml-2 bg-orange-500 hover:bg-orange-600 text-white"
-                    onPress={prevVideo}
-                  >
-                    <ChevronLeftIcon className="h-5 w-5" />
-                  </Button>
-                </div>
+
                 
-                <div className="absolute inset-y-0 right-0 flex items-center">
-                  <Button
-                    isIconOnly
-                    className="mr-2 bg-orange-500 hover:bg-orange-600 text-white"
-                    onPress={nextVideo}
-                  >
-                    <ChevronRightIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                
-                {/* Indicadores */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                  {videos.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`w-3 h-3 rounded-full transition-colors ${
-                        index === currentVideo ? 'bg-orange-500' : 'bg-white/50'
-                      }`}
-                      onClick={() => setCurrentVideo(index)}
-                    />
-                  ))}
-                </div>
+
               </CardBody>
             </Card>
+            {/* Controles de navegación debajo del video */}
+            <div className="flex justify-center mt-4 space-x-4">
+              <Button
+                isIconOnly
+                className="bg-orange-500 hover:bg-orange-600 text-white"
+                onPress={prevVideo}
+              >
+                <ChevronLeftIcon className="h-5 w-5" />
+              </Button>
+              <Button
+                isIconOnly
+                className="bg-orange-500 hover:bg-orange-600 text-white"
+                onPress={nextVideo}
+              >
+                <ChevronRightIcon className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
