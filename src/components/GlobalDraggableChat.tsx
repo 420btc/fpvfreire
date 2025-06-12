@@ -8,6 +8,7 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  responseTime?: number; // Tiempo de respuesta en segundos
 }
 
 const GlobalDraggableChat: React.FC = () => {
@@ -125,6 +126,8 @@ const GlobalDraggableChat: React.FC = () => {
     setInputMessage('');
     setIsLoading(true);
 
+    const startTime = Date.now(); // Capturar tiempo de inicio
+
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -137,7 +140,7 @@ const GlobalDraggableChat: React.FC = () => {
           messages: [
             {
               role: 'system',
-              content: 'Eres un experto en drones FPV (First Person View) y servicios de grabación aérea. Tu nombre es Carlos y trabajas para Freire FPV. Tienes amplio conocimiento sobre: tipos de drones FPV, técnicas de pilotaje, equipamiento necesario, regulaciones de vuelo, servicios de grabación para bodas, eventos, deportes, inspecciones, publicidad, etc. Responde de manera profesional pero amigable, en español, y siempre enfócate en cómo los drones FPV pueden ayudar al cliente. Si te preguntan sobre precios, menciona que pueden contactar directamente para un presupuesto personalizado.'
+              content: 'Eres un experto en drones FPV (First Person View) y servicios de grabación aérea. Tu nombre es Carlos y trabajas para Freire FPV. Tienes amplio conocimiento sobre: tipos de drones FPV, técnicas de pilotaje, equipamiento necesario, regulaciones de vuelo, servicios de grabación para bodas, eventos, deportes, inspecciones, publicidad, etc. Responde de manera profesional pero amigable, en español o en el idioma que te hablen, y siempre enfócate en cómo los drones FPV pueden ayudar al cliente. Si te preguntan sobre precios, menciona que pueden contactar directamente para un presupuesto personalizado.'
             },
             {
               role: 'user',
@@ -154,21 +157,29 @@ const GlobalDraggableChat: React.FC = () => {
       }
 
       const data = await response.json();
+      const endTime = Date.now();
+      const responseTimeInSeconds = (endTime - startTime) / 1000; // Convertir a segundos
+      
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         text: data.choices[0].message.content,
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
+        responseTime: responseTimeInSeconds
       };
 
       setMessages(prev => [...prev, botResponse]);
     } catch (error) {
       console.error('Error:', error);
+      const endTime = Date.now();
+      const responseTimeInSeconds = (endTime - startTime) / 1000;
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: 'Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo o contacta directamente conmigo.',
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
+        responseTime: responseTimeInSeconds
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -254,12 +265,23 @@ const GlobalDraggableChat: React.FC = () => {
                     }`}
                   >
                     <p className="text-sm">{message.text}</p>
-                    <p className="text-xs opacity-70 mt-1">
-                      {message.timestamp.toLocaleTimeString('es-ES', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </p>
+                    <div className="flex justify-between items-center text-xs opacity-70 mt-1">
+                      <span>
+                        {message.timestamp.toLocaleTimeString('es-ES', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </span>
+                      {!message.isUser && message.responseTime !== undefined && (
+                        <span 
+                          className={`ml-2 ${message.responseTime <= 2 ? 'text-green-500' : 
+                                          message.responseTime <= 6 ? 'text-orange-500' : 
+                                          'text-red-500'}`}
+                        >
+                          {message.responseTime.toFixed(1)}s
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

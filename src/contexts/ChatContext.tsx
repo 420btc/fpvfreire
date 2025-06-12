@@ -5,6 +5,7 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  responseTime?: number; // Tiempo de respuesta en segundos
 }
 
 interface ChatPosition {
