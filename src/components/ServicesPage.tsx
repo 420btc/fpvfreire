@@ -1,5 +1,8 @@
-import { Card, CardBody, CardFooter, Button } from "@heroui/react";
+import { Card, CardBody, CardFooter, Button, Input, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
 import { Icon } from '@iconify/react';
+import { useState } from 'react';
+import emailjs from 'emailjs-com';
+import { useNavigate } from 'react-router-dom';
 
 const servicesData = [
   {
@@ -91,6 +94,61 @@ const workflowSteps = [
 ];
 
 const ServicesPage = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedService, setSelectedService] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const navigate = useNavigate();
+
+  const handleServiceRequest = (serviceName: string) => {
+    setSelectedService(serviceName);
+    setFormData({
+      ...formData,
+      message: `Estoy interesado en el servicio de ${serviceName}. `
+    });
+    onOpen();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    const templateParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      phone: formData.phone,
+      service: selectedService,
+      message: formData.message,
+      to_name: 'Freire FPV'
+    };
+
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams, 'YOUR_USER_ID')
+      .then((result) => {
+        console.log('Email sent successfully:', result.text);
+        alert('¡Solicitud enviada correctamente! Te contactaremos pronto.');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+        onOpenChange();
+      }, (error) => {
+        console.log('Error sending email:', error.text);
+        alert('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
+      });
+  };
+
+  const handleContactRedirect = () => {
+    navigate('/contacto');
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header Section */}
@@ -139,6 +197,7 @@ const ServicesPage = () => {
                   <Button 
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
                     size="lg"
+                    onPress={() => handleServiceRequest(service.title)}
                   >
                     SOLICITAR
                   </Button>
@@ -178,11 +237,89 @@ const ServicesPage = () => {
           <Button 
             size="lg"
             className="bg-white text-orange-500 hover:bg-gray-100 font-bold px-8 py-3 text-lg mt-6"
+            onPress={handleContactRedirect}
           >
             CONTACTAR AHORA
           </Button>
         </div>
       </section>
+
+      {/* Modal de Solicitud */}
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                <h3 className="text-xl font-bold">Solicitar Servicio: {selectedService}</h3>
+                <p className="text-sm text-default-500">Completa el formulario y te contactaremos pronto</p>
+              </ModalHeader>
+              <ModalBody>
+                <form onSubmit={handleSubmit} id="service-request-form">
+                  <div className="space-y-4">
+                    <Input
+                      label="Nombre completo"
+                      placeholder="Tu nombre"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      isRequired
+                    />
+                    <Input
+                      label="Email"
+                      placeholder="tu@email.com"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      isRequired
+                    />
+                    <Input
+                      label="Teléfono"
+                      placeholder="Tu número de teléfono"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                    />
+                    <Textarea
+                      label="Mensaje"
+                      placeholder="Cuéntanos más detalles sobre tu proyecto..."
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      minRows={4}
+                      isRequired
+                    />
+                  </div>
+                </form>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancelar
+                </Button>
+                <Button 
+                  color="primary" 
+                  type="submit" 
+                  form="service-request-form"
+                  className="bg-orange-500 hover:bg-orange-600"
+                >
+                  Enviar Solicitud
+                </Button>
+                <Button 
+                  color="secondary" 
+                  variant="bordered"
+                  onPress={() => {
+                    onClose();
+                    handleContactRedirect();
+                  }}
+                >
+                  Ir a Contacto
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
