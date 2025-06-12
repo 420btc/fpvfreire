@@ -347,64 +347,64 @@ const ContactPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact Information */}
             <Card className="bg-content1">
-              <CardBody className="p-8">
-                <h2 className="text-2xl font-bold text-orange-500 mb-6">
+              <CardBody className="p-8 lg:p-12">
+                <h2 className="text-2xl lg:text-3xl font-bold text-orange-500 mb-6 lg:mb-8">
                   Información de Contacto
                 </h2>
                 
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-orange-500 p-3 rounded-full">
-                      <FaPhone className="text-white text-lg" />
+                <div className="space-y-6 lg:space-y-8">
+                  <div className="flex items-center space-x-4 lg:space-x-6">
+                    <div className="bg-orange-500 p-3 lg:p-4 rounded-full">
+                      <FaPhone className="text-white text-lg lg:text-xl" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground">Teléfono</h3>
-                      <p className="text-default-600">+34 685 78 83 25</p>
+                      <h3 className="font-semibold text-foreground text-base lg:text-lg">Teléfono</h3>
+                      <p className="text-default-600 text-sm lg:text-base">+34 685 78 83 25</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-orange-500 p-3 rounded-full">
-                      <FaEnvelope className="text-white text-lg" />
+                  <div className="flex items-center space-x-4 lg:space-x-6">
+                    <div className="bg-orange-500 p-3 lg:p-4 rounded-full">
+                      <FaEnvelope className="text-white text-lg lg:text-xl" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground">Email</h3>
-                      <p className="text-default-600">fpvfcarlos@gmail.com</p>
+                      <h3 className="font-semibold text-foreground text-base lg:text-lg">Email</h3>
+                      <p className="text-default-600 text-sm lg:text-base">fpvfcarlos@gmail.com</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-orange-500 p-3 rounded-full">
-                      <FaMapMarkerAlt className="text-white text-lg" />
+                  <div className="flex items-center space-x-4 lg:space-x-6">
+                    <div className="bg-orange-500 p-3 lg:p-4 rounded-full">
+                      <FaMapMarkerAlt className="text-white text-lg lg:text-xl" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground">Ubicación</h3>
-                      <p className="text-default-600">Málaga, Costa del Sol</p>
-                      <p className="text-default-600">Operamos en toda Andalucía</p>
+                      <h3 className="font-semibold text-foreground text-base lg:text-lg">Ubicación</h3>
+                      <p className="text-default-600 text-sm lg:text-base">Málaga, Costa del Sol</p>
+                      <p className="text-default-600 text-sm lg:text-base">Operamos en toda Andalucía</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-orange-500 p-3 rounded-full">
-                      <FaClock className="text-white text-lg" />
+                  <div className="flex items-center space-x-4 lg:space-x-6">
+                    <div className="bg-orange-500 p-3 lg:p-4 rounded-full">
+                      <FaClock className="text-white text-lg lg:text-xl" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground">Horario</h3>
-                      <p className="text-default-600">Lunes a Viernes: 8:00 - 19:00</p>
-                      <p className="text-default-600">Sábados: 9:00 - 14:00</p>
-                      <p className="text-default-600">Domingos: Cerrado</p>
+                      <h3 className="font-semibold text-foreground text-base lg:text-lg">Horario</h3>
+                      <p className="text-default-600 text-sm lg:text-base">Lunes a Viernes: 8:00 - 19:00</p>
+                      <p className="text-default-600 text-sm lg:text-base">Sábados: 9:00 - 14:00</p>
+                      <p className="text-default-600 text-sm lg:text-base">Domingos: Cerrado</p>
                     </div>
                   </div>
 
-                  <div className="flex space-x-4 pt-4">
-                    <a href="https://www.instagram.com/cpf.pv/" target="_blank" rel="noopener noreferrer" className="bg-pink-600 p-3 rounded-full cursor-pointer hover:bg-pink-700 transition-colors">
-                      <FaInstagram className="text-white text-lg" />
+                  <div className="flex space-x-4 lg:space-x-6 pt-4 lg:pt-6">
+                    <a href="https://www.instagram.com/cpf.pv/" target="_blank" rel="noopener noreferrer" className="bg-pink-600 p-3 lg:p-4 rounded-full cursor-pointer hover:bg-pink-700 transition-colors">
+                      <FaInstagram className="text-white text-lg lg:text-xl" />
                     </a>
-                    <a href="https://www.youtube.com/@CarlosFreire" target="_blank" rel="noopener noreferrer" className="bg-red-600 p-3 rounded-full cursor-pointer hover:bg-red-700 transition-colors">
-                      <FaYoutube className="text-white text-lg" />
+                    <a href="https://www.youtube.com/@CarlosFreire" target="_blank" rel="noopener noreferrer" className="bg-red-600 p-3 lg:p-4 rounded-full cursor-pointer hover:bg-red-700 transition-colors">
+                      <FaYoutube className="text-white text-lg lg:text-xl" />
                     </a>
-                    <a href="https://x.com/CarlosFreire0" target="_blank" rel="noopener noreferrer" className="bg-blue-400 p-3 rounded-full cursor-pointer hover:bg-blue-500 transition-colors">
-                      <FaTwitter className="text-white text-lg" />
+                    <a href="https://x.com/CarlosFreire0" target="_blank" rel="noopener noreferrer" className="bg-blue-400 p-3 lg:p-4 rounded-full cursor-pointer hover:bg-blue-500 transition-colors">
+                      <FaTwitter className="text-white text-lg lg:text-xl" />
                     </a>
                   </div>
                 </div>
