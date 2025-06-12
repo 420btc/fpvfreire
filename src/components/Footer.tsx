@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from "@heroui/react";
 import { Icon } from '@iconify/react';
 
