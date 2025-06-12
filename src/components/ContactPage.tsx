@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, Button, Input, Textarea } from '@heroui/react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaTwitter, FaInstagram, FaYoutube, FaLaptop } from 'react-icons/fa';
 import emailjs from 'emailjs-com';
 
 // Mapbox token
@@ -284,7 +284,7 @@ const ContactPage = () => {
             {/* Contact Information */}
             <Card className="bg-content1">
               <CardBody className="p-8">
-                <h2 className="text-2xl font-bold text-white mb-6 bg-gray-800 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-orange-500 mb-6">
                   Información de Contacto
                 </h2>
                 
@@ -333,15 +333,15 @@ const ContactPage = () => {
                   </div>
 
                   <div className="flex space-x-4 pt-4">
-                    <div className="bg-blue-600 p-3 rounded-full cursor-pointer hover:bg-blue-700 transition-colors">
-                      <FaFacebook className="text-white text-lg" />
-                    </div>
-                    <div className="bg-blue-400 p-3 rounded-full cursor-pointer hover:bg-blue-500 transition-colors">
-                      <FaTwitter className="text-white text-lg" />
-                    </div>
-                    <div className="bg-pink-600 p-3 rounded-full cursor-pointer hover:bg-pink-700 transition-colors">
+                    <a href="https://www.instagram.com/cpf.pv/" target="_blank" rel="noopener noreferrer" className="bg-pink-600 p-3 rounded-full cursor-pointer hover:bg-pink-700 transition-colors">
                       <FaInstagram className="text-white text-lg" />
-                    </div>
+                    </a>
+                    <a href="https://www.youtube.com/@CarlosFreire" target="_blank" rel="noopener noreferrer" className="bg-red-600 p-3 rounded-full cursor-pointer hover:bg-red-700 transition-colors">
+                      <FaYoutube className="text-white text-lg" />
+                    </a>
+                    <a href="https://x.com/CarlosFreire0" target="_blank" rel="noopener noreferrer" className="bg-blue-400 p-3 rounded-full cursor-pointer hover:bg-blue-500 transition-colors">
+                      <FaTwitter className="text-white text-lg" />
+                    </a>
                   </div>
                 </div>
               </CardBody>
@@ -512,7 +512,7 @@ const ContactPage = () => {
           <div className="max-w-5xl mx-auto mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {/* Current Weather */}
-              <Card className="bg-black text-white border border-orange-500">
+              <Card className="bg-content1 border border-orange-500">
                 <CardBody className="p-4 text-center">
                   <h3 className="text-lg font-bold text-orange-500 mb-2">Clima Actual</h3>
                   {loading ? (
@@ -540,7 +540,7 @@ const ContactPage = () => {
               </Card>
 
               {/* Flight Conditions */}
-              <Card className="bg-black text-white border border-orange-500">
+              <Card className="bg-content1 border border-orange-500">
                 <CardBody className="p-4 text-center">
                   <h3 className="text-lg font-bold text-orange-500 mb-2">Condiciones de Vuelo</h3>
                   {loading ? (
@@ -630,6 +630,49 @@ const ContactPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Otros Servicios */}
+      <section className="py-16 bg-content2">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              Descubre mis otros servicios
+            </h2>
+            
+            <Card className="bg-content1 hover:shadow-lg transition-shadow duration-300">
+              <CardBody className="p-8">
+                <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-8">
+                  <div className="bg-orange-500 p-6 rounded-full">
+                    <FaLaptop className="text-white text-4xl" />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold text-foreground mb-4">
+                      Desarrollo Full Stack
+                    </h3>
+                    <p className="text-default-600 text-lg mb-6">
+                      Además de los servicios de drones, también me dedico al desarrollo web y aplicaciones. 
+                      Descubre mi portfolio de proyectos tecnológicos.
+                    </p>
+                    <a 
+                      href="https://portfoliodos.vercel.app/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block"
+                    >
+                      <Button 
+                        size="lg"
+                        className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
+                      >
+                        VER PORTFOLIO
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
           </div>
         </div>
       </section>

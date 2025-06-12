@@ -1,4 +1,3 @@
-import { Link } from "@heroui/react";
 import { Icon } from '@iconify/react';
 
 const Footer = () => {
@@ -10,15 +9,15 @@ const Footer = () => {
             <p>&copy; 2024 Freire FPV - Carlos Pastor Freire</p>
           </div>
           <div className="flex space-x-4">
-            <Link href="#" aria-label="Instagram">
+            <a href="https://www.instagram.com/cpf.pv/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <Icon icon="lucide:instagram" width={24} height={24} />
-            </Link>
-            <Link href="#" aria-label="YouTube">
+            </a>
+            <a href="https://www.youtube.com/@CarlosFreire" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
               <Icon icon="lucide:youtube" width={24} height={24} />
-            </Link>
-            <Link href="#" aria-label="Twitter">
+            </a>
+            <a href="https://x.com/CarlosFreire0" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
               <Icon icon="lucide:twitter" width={24} height={24} />
-            </Link>
+            </a>
           </div>
         </div>
       </div>
