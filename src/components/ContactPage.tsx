@@ -109,7 +109,19 @@ const ContactPage = () => {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/satellite-v9',
         center: [0, 20], // Start from a wider view
-        zoom: 2
+        zoom: 1,
+        projection: 'globe' // Vista de globo en lugar de plana
+      });
+
+      // Configurar la vista de globo
+      map.current.on('style.load', () => {
+        map.current?.setFog({
+          'color': 'rgb(186, 210, 235)', // Color del horizonte
+          'high-color': 'rgb(36, 92, 223)', // Color del cielo
+          'horizon-blend': 0.02, // Mezcla del horizonte
+          'space-color': 'rgb(11, 11, 25)', // Color del espacio
+          'star-intensity': 0.6 // Intensidad de las estrellas
+        });
       });
 
       map.current.on('load', () => {
@@ -197,15 +209,18 @@ const ContactPage = () => {
           }
         });
 
-        // Fly to Málaga with animation
+        // Fly to Málaga with dramatic animation from globe view
         setTimeout(() => {
           map.current?.flyTo({
             center: [-4.4214, 36.7213],
             zoom: 11,
-            duration: 3000,
-            essential: true
+            duration: 4000, // Duración más larga para efecto dramático
+            essential: true,
+            curve: 1.2, // Curva más pronunciada para efecto de vuelo
+            speed: 0.7, // Velocidad más lenta para mejor efecto visual
+            easing: (t) => t * (2 - t) // Easing suave para entrada y salida
           });
-        }, 1000);
+        }, 2000); // Esperar más tiempo para apreciar la vista del globo
       });
 
       map.current.on('error', (e) => {
