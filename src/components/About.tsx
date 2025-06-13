@@ -13,6 +13,10 @@ const About = () => {
     {
       src: "/videos/VillaSunset.mp4",
       title: "Villa Sunset"
+    },
+    {
+      src: "/videos/Casapaco.mp4",
+      title: "Casa Paco"
     }
   ];
 
