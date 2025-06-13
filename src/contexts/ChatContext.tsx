@@ -49,7 +49,14 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       timestamp: new Date()
     }
   ]);
-  const [position, setPosition] = useState<ChatPosition>({ x: window.innerWidth - 420, y: window.innerHeight - 500 });
+  const [position, setPosition] = useState<ChatPosition>(() => {
+    // Detectar si es móvil y establecer posición inicial apropiada
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      return { x: window.innerWidth / 2 - 192, y: window.innerHeight - 420 }; // Parte inferior centrado
+    }
+    return { x: window.innerWidth - 420, y: window.innerHeight - 500 }; // Esquina inferior derecha
+  });
 
   // Cargar datos del localStorage al inicializar
   useEffect(() => {

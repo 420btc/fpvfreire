@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardBody, CardHeader, Button, Input } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { useChatContext } from '../contexts/ChatContext';
@@ -26,6 +26,7 @@ const GlobalDraggableChat: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
 
@@ -34,8 +35,29 @@ const GlobalDraggableChat: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Manejar el arrastre del chat
+  // Detectar cambios en el tamaño de pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      const newIsMobile = window.innerWidth < 768;
+      setIsMobile(newIsMobile);
+      
+      // Si cambia de desktop a móvil, posicionar en la parte inferior
+       if (newIsMobile && !isMobile) {
+         setPosition({
+           x: window.innerWidth / 2 - 192,
+           y: window.innerHeight - 420
+         });
+       }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobile, setPosition]);
+
+  // Manejar el arrastre del chat (solo en desktop)
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Deshabilitar arrastre en móviles
+    if (isMobile) return;
     if (!chatRef.current) return;
     
     const rect = chatRef.current.getBoundingClientRect();
@@ -211,13 +233,23 @@ const GlobalDraggableChat: React.FC = () => {
 
       {/* Ventana de chat arrastrable */}
        {isOpen && (
-         <div className="fixed z-50" style={{ left: position.x, top: position.y }}>
+         <div 
+           className="fixed z-50 md:block" 
+           style={{ 
+             left: isMobile ? '50%' : position.x, 
+             bottom: isMobile ? '20px' : 'auto',
+             top: isMobile ? 'auto' : position.y,
+             transform: isMobile ? 'translateX(-50%)' : 'none'
+           }}
+         >
            <Card 
           ref={chatRef}
-          className={`w-96 h-96 shadow-2xl border border-orange-200 ${isDragging ? 'cursor-move' : ''}`}
+          className={`w-96 h-96 max-w-[90vw] max-h-[80vh] md:w-96 md:h-96 shadow-2xl border border-orange-200 ${isDragging ? 'cursor-move' : ''}`}
         >
           <CardHeader 
-            className="bg-orange-500 text-white p-4 flex justify-between items-center cursor-move"
+            className={`bg-orange-500 text-white p-4 flex justify-between items-center ${
+              !isMobile ? 'cursor-move' : 'cursor-default'
+            }`}
             onMouseDown={handleMouseDown}
           >
             <div className="flex items-center space-x-2">
