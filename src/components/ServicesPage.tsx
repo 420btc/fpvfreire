@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, Button, Input, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 import { useNavigate } from 'react-router-dom';
 
 const servicesData = [
@@ -121,28 +121,43 @@ const ServicesPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    const templateParams = {
-      from_name: formData.name,
-      from_email: formData.email,
-      phone: formData.phone,
-      service: selectedService,
-      message: formData.message,
-      to_name: 'Freire FPV'
-    };
+    // EmailJS configuration (same as other components)
+    const SERVICE_ID = 'service_k65jk6c';
+    const TEMPLATE_ADMIN = 'template_1exdmsp';
+    const PUBLIC_KEY = 'T0NH6Fx_YFfNyGSCO';
+    
+    try {
+      // Initialize EmailJS with public key
+      emailjs.init(PUBLIC_KEY);
+      
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        subject: `Solicitud de servicio: ${selectedService}`,
+        message: formData.message,
+        to_name: 'Freire FPV',
+        to_email: 'carlosfreire777@gmail.com',
+        reply_to: formData.email
+      };
 
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams, 'YOUR_USER_ID')
-      .then((result) => {
-        console.log('Email sent successfully:', result.text);
-        alert('¡Solicitud enviada correctamente! Te contactaremos pronto.');
-        setFormData({ name: '', email: '', phone: '', message: '' });
-        onOpenChange();
-      }, (error) => {
-        console.log('Error sending email:', error.text);
-        alert('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
-      });
+      const result = await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ADMIN,
+        templateParams
+      );
+      
+      console.log('Email sent successfully:', result.status, result.text);
+      alert('¡Solicitud enviada correctamente! Te contactaremos pronto.');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      onOpenChange();
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
+    }
   };
 
   const handleContactRedirect = () => {

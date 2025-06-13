@@ -3,7 +3,7 @@ import { Card, CardBody, Button, Input, Textarea } from '@heroui/react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaTwitter, FaInstagram, FaYoutube, FaLaptop } from 'react-icons/fa';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 // Mapbox token
 mapboxgl.accessToken = 'pk.eyJ1IjoiNDIwYnRjIiwiYSI6ImNtOTN3ejBhdzByNjgycHF6dnVmeHl2ZTUifQ.Utq_q5wN6DHwpkn6rcpZdw';
@@ -254,6 +254,9 @@ const ContactPage = () => {
     setSubmitStatus('idle');
     
     try {
+      // Initialize EmailJS with public key
+      emailjs.init(PUBLIC_KEY);
+      
       // Prepare template parameters for admin email
       const templateParams = {
         from_name: formData.name,
@@ -267,12 +270,13 @@ const ContactPage = () => {
       };
       
       // Send email to admin (you)
-      await emailjs.send(
+      const result = await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ADMIN,
-        templateParams,
-        PUBLIC_KEY
+        templateParams
       );
+      
+      console.log('Email sent successfully:', result.status, result.text);
       
       // Send confirmation email to client
       const clientParams = {
@@ -287,8 +291,7 @@ const ContactPage = () => {
       await emailjs.send(
         SERVICE_ID,
         TEMPLATE_CLIENT,
-        clientParams,
-        PUBLIC_KEY
+        clientParams
       );
       
       setSubmitStatus('success');

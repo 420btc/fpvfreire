@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Input, Textarea } from "@heroui/react";
 import { useState } from 'react';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +32,9 @@ const Contact = () => {
     setSubmitStatus('idle');
     
     try {
+      // Initialize EmailJS with public key
+      emailjs.init(PUBLIC_KEY);
+      
       // Prepare template parameters for admin email
       const templateParams = {
         from_name: formData.name,
@@ -45,12 +48,13 @@ const Contact = () => {
       };
       
       // Send email to admin (you)
-      await emailjs.send(
+      const result = await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ADMIN,
-        templateParams,
-        PUBLIC_KEY
+        templateParams
       );
+      
+      console.log('Email sent successfully:', result.status, result.text);
       
       // Send confirmation email to client
       const clientParams = {
@@ -65,8 +69,7 @@ const Contact = () => {
       await emailjs.send(
         SERVICE_ID,
         TEMPLATE_CLIENT,
-        clientParams,
-        PUBLIC_KEY
+        clientParams
       );
       
       setSubmitStatus('success');
