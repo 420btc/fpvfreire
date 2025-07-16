@@ -125,9 +125,9 @@ const ServicesPage = () => {
     e.preventDefault();
     
     // EmailJS configuration (same as other components)
-    const SERVICE_ID = 'service_k65jk6c';
-    const TEMPLATE_ADMIN = 'template_1exdmsp';
-    const PUBLIC_KEY = 'T0NH6Fx_YFfNyGSCO';
+    const SERVICE_ID = 'service_o2fmskg';
+    const TEMPLATE_ADMIN = 'template_oukgybe';
+    const PUBLIC_KEY = '0SZPpCqrP9JOhJBde';
     
     try {
       // Initialize EmailJS with public key
@@ -139,8 +139,6 @@ const ServicesPage = () => {
         phone: formData.phone,
         subject: `Solicitud de servicio: ${selectedService}`,
         message: formData.message,
-        to_name: 'Freire FPV',
-        to_email: 'carlosfreire777@gmail.com',
         reply_to: formData.email
       };
 

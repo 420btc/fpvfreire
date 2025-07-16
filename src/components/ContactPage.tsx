@@ -52,10 +52,10 @@ const ContactPage = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   
   // EmailJS service configuration
-  const SERVICE_ID = 'service_k65jk6c' ; // Reemplaza con tu Service ID real
-  const TEMPLATE_ADMIN = 'template_1exdmsp'; // Template que te llega a ti
-  const TEMPLATE_CLIENT = 'template_tnzvsui'; // Template que le llega al cliente
-  const PUBLIC_KEY = 'T0NH6Fx_YFfNyGSCO'; // Tu nueva Public Key
+  const SERVICE_ID = 'service_o2fmskg'; // Nuevo Service ID
+  const TEMPLATE_ADMIN = 'template_oukgybe'; // Template que te llega a ti
+  const TEMPLATE_CLIENT = 'template_1d1a60b'; // Template que le llega al cliente
+  const PUBLIC_KEY = '0SZPpCqrP9JOhJBde'; // Tu nueva Public Key
 
   // Fetch weather data
   useEffect(() => {
@@ -257,19 +257,17 @@ const ContactPage = () => {
       // Initialize EmailJS with public key
       emailjs.init(PUBLIC_KEY);
       
-      // Prepare template parameters for admin email
+      // Prepare template parameters for admin email - Simplificado para pruebas
       const templateParams = {
         from_name: formData.name,
         from_email: formData.email,
         phone: formData.phone,
         subject: formData.subject,
         message: formData.message,
-        to_name: 'Freire FPV', // Tu nombre o empresa
-        to_email: 'carlosfreire777@gmail.com', // Tu email donde quieres recibir los mensajes
         reply_to: formData.email
       };
       
-      // Send email to admin (you)
+      // Send email to admin (you) - Solo template admin por ahora
       const result = await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ADMIN,
@@ -278,14 +276,11 @@ const ContactPage = () => {
       
       console.log('Email sent successfully:', result.status, result.text);
       
-      // Send confirmation email to client
+      // Send confirmation email to client - Reactivado con variables corregidas
       const clientParams = {
-        from_name: 'Freire FPV',
-        from_email: 'carlosfreire777@gmail.com', // Tu email como remitente
-        to_name: formData.name,
-        to_email: formData.email, // Email del cliente
-        subject: `Confirmación: ${formData.subject}`,
-        original_message: formData.message
+        to_name: formData.name,  // Nombre del cliente
+        email: formData.email,   // Email del cliente (coincide con tu template)
+        subject: formData.subject // Asunto original
       };
       
       await emailjs.send(
@@ -371,7 +366,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground text-base lg:text-lg">Email</h3>
-                      <p className="text-default-600 text-sm lg:text-base">fpvfcarlos@gmail.com</p>
+                      <p className="text-default-600 text-sm lg:text-base">chocolati_558@hotmail.com</p>
                     </div>
                   </div>
 

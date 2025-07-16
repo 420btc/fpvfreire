@@ -13,10 +13,10 @@ const Contact = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   
   // EmailJS service configuration (misma configuración que ContactPage)
-  const SERVICE_ID = 'service_k65jk6c';
-  const TEMPLATE_ADMIN = 'template_1exdmsp';
-  const TEMPLATE_CLIENT = 'template_tnzvsui';
-  const PUBLIC_KEY = 'T0NH6Fx_YFfNyGSCO';
+  const SERVICE_ID = 'service_o2fmskg';
+  const TEMPLATE_ADMIN = 'template_oukgybe';
+  const TEMPLATE_CLIENT = 'template_1d1a60b';
+  const PUBLIC_KEY = '0SZPpCqrP9JOhJBde';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -35,19 +35,17 @@ const Contact = () => {
       // Initialize EmailJS with public key
       emailjs.init(PUBLIC_KEY);
       
-      // Prepare template parameters for admin email
+      // Prepare template parameters for admin email - Simplificado para pruebas
       const templateParams = {
         from_name: formData.name,
         from_email: formData.email,
         phone: '', // No hay campo de teléfono en este formulario
         subject: 'Contacto desde página principal',
         message: formData.message,
-        to_name: 'Freire FPV',
-        to_email: 'carlosfreire777@gmail.com',
         reply_to: formData.email
       };
       
-      // Send email to admin (you)
+      // Send email to admin (you) - Solo template admin por ahora
       const result = await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ADMIN,
@@ -56,14 +54,11 @@ const Contact = () => {
       
       console.log('Email sent successfully:', result.status, result.text);
       
-      // Send confirmation email to client
+      // Send confirmation email to client - Reactivado con variables corregidas
       const clientParams = {
-        from_name: 'Freire FPV',
-        from_email: 'carlosfreire777@gmail.com',
-        to_name: formData.name,
-        to_email: formData.email,
-        subject: 'Confirmación: Contacto desde página principal',
-        original_message: formData.message
+        to_name: formData.name,  // Nombre del cliente
+        email: formData.email,   // Email del cliente (coincide con tu template)
+        subject: 'Contacto desde página principal' // Asunto
       };
       
       await emailjs.send(
