@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Card, CardBody, Button, Input, Textarea } from '@heroui/react';
+import { Card, CardBody, Button, Input, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaTwitter, FaInstagram, FaYoutube, FaLaptop } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaTwitter, FaInstagram, FaYoutube, FaLaptop, FaWind, FaEye, FaThermometerHalf, FaTint } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
 
 // Mapbox token
@@ -24,6 +24,7 @@ interface WeatherData {
   }[];
   wind: {
     speed: number;
+    deg?: number; // Wind direction in degrees
   };
   rain?: {
     '3h': number;
@@ -39,6 +40,8 @@ const ContactPage = () => {
   const map = useRef<mapboxgl.Map | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDay, setSelectedDay] = useState<WeatherData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   // EmailJS configuration
   const [formData, setFormData] = useState({
@@ -70,13 +73,14 @@ const ContactPage = () => {
         // OpenWeather API returns forecasts every 3 hours, so every 8th item is roughly the same time next day
         const dailyForecasts = [];
         
-        for (let i = 0; i < data.list.length && dailyForecasts.length < 7; i += 8) {
+        // Cambiar de 7 días a 5 días
+        for (let i = 0; i < data.list.length && dailyForecasts.length < 5; i += 8) {
           dailyForecasts.push(data.list[i]);
         }
         
-        // If we don't have 7 full days, fill with remaining data
-        if (dailyForecasts.length < 7) {
-          const remaining = 7 - dailyForecasts.length;
+        // If we don't have 5 full days, fill with remaining data
+        if (dailyForecasts.length < 5) {
+          const remaining = 5 - dailyForecasts.length;
           const lastIndex = dailyForecasts.length * 8;
           
           for (let i = 0; i < remaining && (lastIndex + i) < data.list.length; i++) {
@@ -308,8 +312,26 @@ const ContactPage = () => {
   };
 
   const getWeatherColor = (rain: number, wind: number) => {
-    if (rain >= 1 || wind >= 20) return 'bg-red-500';
-    return 'bg-green-500';
+    if (rain >= 1) return 'bg-red-500 dark:bg-red-600'; // Lluvia - rojo
+    if (wind >= 14) return 'bg-orange-500 dark:bg-orange-600'; // Viento alto - naranja
+    return 'bg-green-500 dark:bg-green-600'; // Condiciones óptimas - verde
+  };
+
+  const getWeatherStatus = (rain: number, wind: number) => {
+    if (rain >= 1) return 'Adversas';
+    if (wind >= 14) return 'Por determinar';
+    return 'Óptimas';
+  };
+
+  const getWindDirection = (degrees: number) => {
+    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO'];
+    const index = Math.round(degrees / 22.5) % 16;
+    return directions[index];
+  };
+
+  const handleDayClick = (day: WeatherData) => {
+    setSelectedDay(day);
+    setIsModalOpen(true);
   };
 
   const getWeatherIcon = (iconCode: string) => {
@@ -323,7 +345,9 @@ const ContactPage = () => {
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-    return days[date.getDay()];
+    const dayName = days[date.getDay()];
+    const dayNumber = date.getDate();
+    return `${dayName} ${dayNumber}`;
   };
 
   return (
@@ -573,9 +597,9 @@ const ContactPage = () => {
           <div className="max-w-5xl mx-auto mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {/* Current Weather */}
-              <Card className="bg-content1 border border-orange-500">
+              <Card className="bg-content1 dark:bg-content1 border border-orange-500 dark:border-orange-400">
                 <CardBody className="p-4 text-center">
-                  <h3 className="text-lg font-bold text-orange-500 mb-2">Clima Actual</h3>
+                  <h3 className="text-lg font-bold text-orange-500 dark:text-orange-400 mb-2">Clima Actual</h3>
                   {loading ? (
                     <div className="text-sm opacity-80">Cargando...</div>
                   ) : weatherData.length > 0 ? (
@@ -601,27 +625,36 @@ const ContactPage = () => {
               </Card>
 
               {/* Flight Conditions */}
-              <Card className="bg-content1 border border-orange-500">
+              <Card className="bg-content1 dark:bg-content1 border border-orange-500 dark:border-orange-400">
                 <CardBody className="p-4 text-center">
-                  <h3 className="text-lg font-bold text-orange-500 mb-2">Condiciones de Vuelo</h3>
+                  <h3 className="text-lg font-bold text-orange-500 dark:text-orange-400 mb-2">Condiciones de Vuelo</h3>
                   {loading ? (
                     <div className="text-sm opacity-80">Evaluando...</div>
                   ) : weatherData.length > 0 ? (
                     <>
                       {(() => {
                         const rainAmount = weatherData[0].rain?.['3h'] || 0;
-                        const isOptimal = rainAmount < 1;
+                        const windSpeed = weatherData[0].wind.speed * 3.6; // Convert m/s to km/h
+                        const status = getWeatherStatus(rainAmount, windSpeed);
                         
                         return (
                           <>
                             <div className={`text-2xl font-bold mb-2 ${
-                              isOptimal ? 'text-green-400' : 'text-red-400'
+                              status === 'Óptimas' ? 'text-green-400' : status === 'Adversas' ? 'text-red-400' : 'text-orange-400'
                             }`}>
-                              {isOptimal ? '✅ ÓPTIMAS' : '⚠️ ADVERSAS'}
+                              {status}
                             </div>
                             <div className="text-3xl font-bold mt-4">
                               💧 {rainAmount.toFixed(1)}mm
                             </div>
+                                                         <div className="text-3xl font-bold mt-4">
+                               💨 {windSpeed.toFixed(0)}km/h
+                             </div>
+                             {weatherData[0].wind.deg !== undefined && (
+                               <div className="text-sm mt-2">
+                                 Dirección: {getWindDirection(weatherData[0].wind.deg)}
+                               </div>
+                             )}
                           </>
                         );
                       })()}
@@ -634,12 +667,12 @@ const ContactPage = () => {
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-center mb-8">Previsión de 7 Días - Málaga</h3>
+          <h3 className="text-2xl font-bold text-center mb-8">Previsión de 5 Días - Málaga</h3>
           
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3 justify-items-center">
               {loading ? (
-                <div className="w-full text-center py-8">
+                <div className="col-span-full text-center py-8">
                   <p>Cargando previsión meteorológica...</p>
                 </div>
               ) : (
@@ -647,28 +680,32 @@ const ContactPage = () => {
                   const rainAmount = day.rain?.['3h'] || 0;
                   const windSpeed = day.wind.speed * 3.6; // Convert m/s to km/h
                   const colorClass = getWeatherColor(rainAmount, windSpeed);
+                  const status = getWeatherStatus(rainAmount, windSpeed);
                   
                   return (
-                    <Card key={index} className={`${colorClass} text-white w-32 md:w-36 flex-shrink-0`}>
-                      <CardBody className="p-3 md:p-4 text-center">
-                        <h3 className="font-bold mb-2 text-sm md:text-base">{formatDate(day.dt)}</h3>
-                        <div className="flex justify-center mb-2">
+                    <Card 
+                      key={index} 
+                      className={`${colorClass} text-white dark:text-gray-100 cursor-pointer hover:scale-105 transition-all duration-200 w-full max-w-36 shadow-md hover:shadow-lg`}
+                      isPressable
+                      onPress={() => handleDayClick(day)}
+                    >
+                      <CardBody className="p-3 text-center space-y-1">
+                        <h3 className="font-bold text-xs sm:text-sm leading-tight">{formatDate(day.dt)}</h3>
+                        <div className="flex justify-center">
                           <img 
                             src={getWeatherIcon(day.weather[0].icon)}
                             alt={day.weather[0].description}
-                            className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                            className="w-10 h-10 object-contain"
                           />
                         </div>
-                        <p className="text-sm md:text-base font-semibold mb-1">{Math.round(day.main.temp)}°C</p>
-                        <p className="text-xs mb-1">💧 {rainAmount.toFixed(1)}mm</p>
-                        <p className="text-xs mb-2">💨 {windSpeed.toFixed(0)}km/h</p>
-                        <div className="mt-1">
-                          {rainAmount < 1 && windSpeed < 20 ? (
-                            <span className="text-xs bg-white bg-opacity-20 px-1.5 py-0.5 rounded">Óptimo</span>
-                          ) : (
-                            <span className="text-xs bg-white bg-opacity-20 px-1.5 py-0.5 rounded">Adversas</span>
-                          )}
+                        <p className="text-sm font-semibold">{Math.round(day.main.temp)}°C</p>
+                        <div className="space-y-1">
+                          <p className="text-xs">💧 {rainAmount.toFixed(1)}mm</p>
+                          <p className="text-xs">💨 {windSpeed.toFixed(0)}km/h</p>
                         </div>
+                        <span className="text-xs bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20 px-2 py-1 rounded inline-block backdrop-blur-sm">
+                          {status}
+                        </span>
                       </CardBody>
                     </Card>
                   );
@@ -680,14 +717,18 @@ const ContactPage = () => {
               <p className="text-sm text-default-600 mb-4">
                 * Las condiciones se evalúan según lluvia (mm) y viento (km/h)
               </p>
-              <div className="flex justify-center space-x-6 text-sm">
+              <div className="flex justify-center space-x-4 text-sm flex-wrap gap-2">
                 <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 bg-green-500 rounded"></div>
-                  <span>Óptimo: &lt;1mm lluvia, &lt;20km/h viento</span>
+                  <div className="w-4 h-4 bg-green-500 dark:bg-green-600 rounded"></div>
+                  <span className="dark:text-gray-200">Óptimo: &lt;1mm lluvia, &lt;14km/h viento</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 bg-red-500 rounded"></div>
-                  <span>Condiciones adversas: ≥1mm lluvia o ≥20km/h viento</span>
+                  <div className="w-4 h-4 bg-orange-500 dark:bg-orange-600 rounded"></div>
+                  <span className="dark:text-gray-200">Por determinar: ≥14km/h viento, &lt;1mm lluvia</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-red-500 dark:bg-red-600 rounded"></div>
+                  <span className="dark:text-gray-200">Condiciones adversas: ≥1mm lluvia</span>
                 </div>
               </div>
             </div>
@@ -826,6 +867,102 @@ const ContactPage = () => {
           </Button>
         </div>
       </section>
+
+             {/* Modal for detailed weather */}
+       <Modal isOpen={isModalOpen} onOpenChange={() => setIsModalOpen(false)} size="lg" placement="center">
+         <ModalContent>
+           <ModalHeader className="text-2xl font-bold text-orange-500 dark:text-orange-400 text-center">
+             Previsión Detallada - {selectedDay ? formatDate(selectedDay.dt) : ''}
+           </ModalHeader>
+           <ModalBody>
+             {selectedDay ? (
+               <div className="space-y-4">
+                 <div className="flex justify-center mb-6">
+                   <img 
+                     src={getWeatherIcon(selectedDay.weather[0].icon)}
+                     alt={selectedDay.weather[0].description}
+                     className="w-32 h-32 object-contain"
+                   />
+                 </div>
+                 
+                 <div className="grid grid-cols-2 gap-4">
+                   <Card className="bg-blue-50 dark:bg-blue-900/30">
+                     <CardBody className="text-center p-4">
+                       <FaThermometerHalf className="text-blue-500 dark:text-blue-400 text-2xl mx-auto mb-2" />
+                       <p className="text-sm text-gray-600 dark:text-gray-300">Temperatura</p>
+                       <p className="text-xl font-bold dark:text-white">{Math.round(selectedDay.main.temp)}°C</p>
+                     </CardBody>
+                   </Card>
+                   
+                   <Card className="bg-cyan-50 dark:bg-cyan-900/30">
+                     <CardBody className="text-center p-4">
+                       <FaTint className="text-cyan-500 dark:text-cyan-400 text-2xl mx-auto mb-2" />
+                       <p className="text-sm text-gray-600 dark:text-gray-300">Humedad</p>
+                       <p className="text-xl font-bold dark:text-white">{selectedDay.main.humidity}%</p>
+                     </CardBody>
+                   </Card>
+                   
+                   <Card className="bg-green-50 dark:bg-green-900/30">
+                     <CardBody className="text-center p-4">
+                       <FaWind className="text-green-500 dark:text-green-400 text-2xl mx-auto mb-2" />
+                       <p className="text-sm text-gray-600 dark:text-gray-300">Viento</p>
+                       <p className="text-xl font-bold dark:text-white">{(selectedDay.wind.speed * 3.6).toFixed(1)} km/h</p>
+                       {selectedDay.wind.deg !== undefined && (
+                         <p className="text-sm text-gray-500 dark:text-gray-400">{getWindDirection(selectedDay.wind.deg)}</p>
+                       )}
+                     </CardBody>
+                   </Card>
+                   
+                   <Card className="bg-purple-50 dark:bg-purple-900/30">
+                     <CardBody className="text-center p-4">
+                       <FaEye className="text-purple-500 dark:text-purple-400 text-2xl mx-auto mb-2" />
+                       <p className="text-sm text-gray-600 dark:text-gray-300">Lluvia (3h)</p>
+                       <p className="text-xl font-bold dark:text-white">{(selectedDay.rain?.['3h'] || 0).toFixed(1)} mm</p>
+                     </CardBody>
+                   </Card>
+                 </div>
+                 
+                                   <Card className={`${getWeatherColor((selectedDay.rain?.['3h'] || 0), selectedDay.wind.speed * 3.6)} text-white`}>
+                    <CardBody className="text-center p-4">
+                      <h4 className="text-lg font-bold mb-2">Condiciones de Vuelo</h4>
+                      <p className="text-xl font-bold">
+                        {(() => {
+                          const rainAmount = selectedDay.rain?.['3h'] || 0;
+                          const windSpeed = selectedDay.wind.speed * 3.6;
+                          if (rainAmount >= 1) return 'Adversas';
+                          if (windSpeed >= 14) return 'Situación por determinar';
+                          return 'Óptimas';
+                        })()}
+                      </p>
+                      <p className="text-sm mt-2 capitalize">{selectedDay.weather[0].description}</p>
+                    </CardBody>
+                  </Card>
+                 
+                 <div className="text-center text-sm text-gray-600 dark:text-gray-300 mt-4">
+                   <p>Fecha: {new Date(selectedDay.dt * 1000).toLocaleDateString('es-ES', { 
+                     weekday: 'long', 
+                     year: 'numeric', 
+                     month: 'long', 
+                     day: 'numeric' 
+                   })}</p>
+                 </div>
+               </div>
+             ) : (
+               <p className="text-center">Selecciona un día para ver la previsión detallada.</p>
+             )}
+           </ModalBody>
+           <ModalFooter className="justify-center">
+             <Button 
+               color="primary" 
+               variant="flat" 
+                               onPress={() => setIsModalOpen(false)}
+               className="bg-orange-500 hover:bg-orange-600 text-white"
+             >
+               Cerrar
+             </Button>
+           </ModalFooter>
+         </ModalContent>
+       </Modal>
     </div>
   );
 };
