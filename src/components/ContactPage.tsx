@@ -669,8 +669,8 @@ const ContactPage = () => {
 
           <h3 className="text-2xl font-bold text-center mb-8">Previsión de 5 Días - Málaga</h3>
           
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3 justify-items-center">
+          <div className="max-w-4xl mx-auto px-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 sm:gap-2 justify-items-center">
               {loading ? (
                 <div className="col-span-full text-center py-8">
                   <p>Cargando previsión meteorológica...</p>
