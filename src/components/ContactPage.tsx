@@ -759,7 +759,7 @@ const ContactPage = () => {
                       Descubre mi portfolio de proyectos tecnológicos.
                     </p>
                     <a 
-                      href="https://portfoliodos.vercel.app/" 
+                      href="https://carlosfr.es" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-block"
