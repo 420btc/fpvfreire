@@ -1,5 +1,5 @@
 import { Card, CardBody, Button } from "@heroui/react";
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { 
   FaPlane, 
   FaCamera, 
@@ -184,17 +184,7 @@ const EquipmentPage = () => {
   const [totalDistance, setTotalDistance] = useState(0); // Distancia total en metros
   const [currentDistance, setCurrentDistance] = useState(0); // Distancia actual durante el vuelo
   const gameAreaRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
   const countdownTimerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const handleGameAreaClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!gameMode || isPlanning || isFlying) return;
