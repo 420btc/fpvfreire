@@ -1,4 +1,5 @@
 import { Card, CardBody, Button } from "@heroui/react";
+import { useState, useRef, useEffect } from 'react';
 import { 
   FaPlane, 
   FaCamera, 
@@ -171,16 +172,647 @@ const additionalEquipment = [
 ];
 
 const EquipmentPage = () => {
+  const [gameMode, setGameMode] = useState(false);
+  const [routePoints, setRoutePoints] = useState<{x: number, y: number, id: number}[]>([]);
+  const [routeCurves, setRouteCurves] = useState<{startX: number, startY: number, midX: number, midY: number, endX: number, endY: number}[]>([]);
+  const [isPlanning, setIsPlanning] = useState(false);
+  const [isFlying, setIsFlying] = useState(false);
+  const [currentPointIndex, setCurrentPointIndex] = useState(0);
+  const [dronePosition, setDronePosition] = useState({x: -60, y: 64});
+  const [countdown, setCountdown] = useState(0);
+  const gameAreaRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const countdownTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleGameAreaClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile || !gameMode || isPlanning || isFlying) return;
+    
+    const rect = gameAreaRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Añadir nuevo punto a la ruta (máximo 3)
+    if (routePoints.length < 3) {
+      const newPoint = {x, y, id: Date.now()};
+      const newRoutePoints = [...routePoints, newPoint];
+      setRoutePoints(newRoutePoints);
+      
+      // Limpiar temporizador anterior si existe
+      if (countdownTimerRef.current) {
+        clearTimeout(countdownTimerRef.current);
+      }
+      
+      // Iniciar countdown de 3 segundos
+      setCountdown(3);
+      startCountdown(newRoutePoints);
+      
+      // Si llegamos al máximo, empezar inmediatamente
+      if (newRoutePoints.length === 3) {
+        setCountdown(0);
+        if (countdownTimerRef.current) {
+          clearTimeout(countdownTimerRef.current);
+        }
+        startRoute(newRoutePoints);
+      }
+    }
+  };
+
+  const startCountdown = (points: {x: number, y: number, id: number}[]) => {
+    let timeLeft = 3;
+    
+    const countdownInterval = setInterval(() => {
+      timeLeft--;
+      setCountdown(timeLeft);
+      
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        startRoute(points);
+      }
+    }, 1000);
+    
+    countdownTimerRef.current = countdownInterval;
+  };
+
+  const startRoute = (points: {x: number, y: number, id: number}[]) => {
+    setCountdown(0);
+    setIsPlanning(true);
+    setCurrentPointIndex(0);
+    
+    // Generar todas las curvas de una vez y guardarlas
+    const currentDronePos = {x: dronePosition.x + 20, y: dronePosition.y};
+    const curves = points.map((point, index) => {
+      const startPoint = index === 0 
+        ? currentDronePos
+        : points[index - 1];
+      
+      const midX = (startPoint.x + point.x) / 2 + (Math.random() - 0.5) * 100;
+      const randomCurveHeight = Math.random() * 30 + 20;
+      const midY = Math.min(startPoint.y, point.y) - randomCurveHeight;
+      
+      const curve = {
+        startX: startPoint.x,
+        startY: startPoint.y,
+        midX: midX,
+        midY: midY,
+        endX: point.x,
+        endY: point.y
+      };
+      
+      console.log(`Generated curve ${index}:`, curve);
+      return curve;
+    });
+    
+    setRouteCurves(curves);
+    
+    // Después de 3 segundos, empezar a volar
+    setTimeout(() => {
+      setIsPlanning(false);
+      setIsFlying(true);
+      // Pasar las curvas directamente para evitar problemas de estado
+      flyToNextPointWithCurves(points, 0, curves);
+    }, 3000);
+  };
+
+  const flyToNextPointWithCurves = (
+    points: {x: number, y: number, id: number}[], 
+    pointIndex: number, 
+    curves: {startX: number, startY: number, midX: number, midY: number, endX: number, endY: number}[]
+  ) => {
+    if (pointIndex >= points.length) {
+      // Ruta completada, resetear después de 3 segundos
+      setTimeout(() => {
+        resetRoute();
+      }, 3000);
+      return;
+    }
+
+    setCurrentPointIndex(pointIndex);
+    
+    // Usar la curva pregenerada
+    animateDroneAlongCurveWithData(pointIndex, points, curves);
+  };
+
+  const animateDroneAlongCurveWithData = (
+    pointIndex: number,
+    allPoints: {x: number, y: number, id: number}[],
+    curves: {startX: number, startY: number, midX: number, midY: number, endX: number, endY: number}[]
+  ) => {
+    // Verificar que las curvas existan
+    if (!curves || curves.length === 0 || !curves[pointIndex]) {
+      console.log('No curve found for index:', pointIndex, 'curves:', curves);
+      return;
+    }
+    
+    const curve = curves[pointIndex];
+    const duration = 3000; // 3 segundos
+    const startTime = Date.now();
+    
+    console.log('Starting animation for point', pointIndex, 'with curve:', curve);
+    
+    const animateStep = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Curva de Bézier cuadrática usando la curva pregenerada
+      const t = progress;
+      const x = Math.pow(1-t, 2) * curve.startX + 2*(1-t)*t * curve.midX + Math.pow(t, 2) * curve.endX;
+      const y = Math.pow(1-t, 2) * curve.startY + 2*(1-t)*t * curve.midY + Math.pow(t, 2) * curve.endY;
+      
+      setDronePosition({x, y});
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateStep);
+      } else {
+        console.log('Animation completed for point', pointIndex);
+        // Llegó al destino, ir al siguiente punto
+        setTimeout(() => {
+          flyToNextPointWithCurves(allPoints, pointIndex + 1, curves);
+        }, 500); // Pequeña pausa en cada punto
+      }
+    };
+    
+    animateStep();
+  };
+
+  const resetRoute = () => {
+    if (countdownTimerRef.current) {
+      clearTimeout(countdownTimerRef.current);
+    }
+    setRoutePoints([]);
+    setRouteCurves([]);
+    setIsFlying(false);
+    setIsPlanning(false);
+    setCurrentPointIndex(0);
+    setCountdown(0);
+    setDronePosition({x: -60, y: 64});
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-b from-content1 to-background">
+      <section className="py-16 bg-gradient-to-b from-content1 to-background relative overflow-hidden">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Mi Equipo</h1>
-          <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto mb-8">
             Equipamiento profesional para producciones audiovisuales de alta calidad
           </p>
+          
+          {/* Game Mode Toggle - Solo PC */}
+          {!isMobile && (
+            <div className="mb-4">
+              <Button
+                size="sm"
+                variant={gameMode ? "solid" : "bordered"}
+                color="warning"
+                onPress={() => setGameMode(!gameMode)}
+                className="text-sm"
+              >
+                {gameMode ? '🎮 Modo Juego ON' : '🎮 Activar Juego'}
+              </Button>
+                             {gameMode && (
+                 <div className="text-xs text-default-500 mt-2">
+                   <p>¡Crea una ruta de hasta 3 puntos! ({routePoints.length}/3)</p>
+                   {countdown > 0 && (
+                     <p className="text-orange-600 font-bold">
+                       ⏱️ Salida en {countdown}s (haz clic para añadir más puntos)
+                     </p>
+                   )}
+                   {routePoints.length > 0 && !isPlanning && !isFlying && countdown === 0 && (
+                     <Button
+                       size="sm"
+                       color="danger"
+                       variant="light"
+                       onPress={resetRoute}
+                       className="text-xs mt-1"
+                     >
+                       🗑️ Limpiar Ruta
+                     </Button>
+                   )}
+                 </div>
+               )}
+            </div>
+          )}
+
+          {/* Drone Animation */}
+          <div 
+            ref={gameAreaRef}
+            className={`relative h-32 w-full max-w-6xl mx-auto ${
+              gameMode && !isMobile ? 'cursor-crosshair' : ''
+            }`}
+            onClick={handleGameAreaClick}
+          >
+            {/* Trail SVG */}
+            <svg 
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 1 }}
+            >
+              {!gameMode ? (
+                <path 
+                  className="drone-trail"
+                  d="M-50,40 Q200,20 400,45 T800,35 Q1000,30 1200,40"
+                  stroke="#ff8000"
+                  strokeWidth="2"
+                  fill="none"
+                  opacity="0.6"
+                  strokeDasharray="5,5"
+                />
+              ) : (
+                <>
+                  {/* Rutas entre puntos */}
+                  {routePoints.length > 0 && routeCurves.length > 0 && routePoints.map((point, index) => {
+                    const curve = routeCurves[index];
+                    if (!curve) return null;
+                    
+                    return (
+                      <path
+                        key={point.id}
+                        className={
+                          isPlanning ? "planning-curve" : 
+                          (isFlying && index <= currentPointIndex) ? "game-trail-active" : "game-trail-curve"
+                        }
+                        d={`M${curve.startX},${curve.startY} Q${curve.midX},${curve.midY} ${curve.endX},${curve.endY}`}
+                        stroke="#ff8000"
+                        strokeWidth="2"
+                        fill="none"
+                        opacity={
+                          isFlying && index <= currentPointIndex ? "0.8" : "0.6"
+                        }
+                        strokeDasharray="5,5"
+                      />
+                    );
+                  })}
+                  
+                  {/* Línea original cuando no hay puntos */}
+                  {routePoints.length === 0 && (
+                    <path 
+                      className="drone-trail"
+                      d={`M-50,64 Q${200 + (Math.sin(Date.now() * 0.001) * 50)},${44 + (Math.cos(Date.now() * 0.001) * 10)} ${400 + (Math.sin(Date.now() * 0.002) * 30)},69 T${800 + (Math.cos(Date.now() * 0.001) * 40)},59 Q1000,54 1200,64`}
+                      stroke="#ff8000"
+                      strokeWidth="2"
+                      fill="none"
+                      opacity="0.6"
+                      strokeDasharray="5,5"
+                    />
+                  )}
+                  
+                  {/* Puntos de la ruta */}
+                  {routePoints.map((point, index) => (
+                    <g key={point.id}>
+                      <circle
+                        cx={point.x}
+                        cy={point.y}
+                        r="8"
+                        fill="#ff8000"
+                        opacity="0.8"
+                        className={
+                          isPlanning ? "target-pulse" : 
+                          (isFlying && index === currentPointIndex) ? "target-active" :
+                          (isFlying && index < currentPointIndex) ? "target-completed" : "target-waiting"
+                        }
+                      />
+                      <text
+                        x={point.x}
+                        y={point.y + 4}
+                        textAnchor="middle"
+                        fill="white"
+                        fontSize="10"
+                        fontWeight="bold"
+                      >
+                        {index + 1}
+                      </text>
+                    </g>
+                  ))}
+                </>
+              )}
+            </svg>
+            
+            {/* Drone */}
+            <div className={gameMode ? "drone-container-game" : "drone-container"}>
+              <div className="drone">
+                {/* Drone Body */}
+                <div className="drone-body">
+                  <div className="drone-center"></div>
+                  {/* Propellers */}
+                  <div className="propeller propeller-1">
+                    <div className="blade blade-1"></div>
+                    <div className="blade blade-2"></div>
+                  </div>
+                  <div className="propeller propeller-2">
+                    <div className="blade blade-1"></div>
+                    <div className="blade blade-2"></div>
+                  </div>
+                  <div className="propeller propeller-3">
+                    <div className="blade blade-1"></div>
+                    <div className="blade blade-2"></div>
+                  </div>
+                  <div className="propeller propeller-4">
+                    <div className="blade blade-1"></div>
+                    <div className="blade blade-2"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Status Indicators */}
+            {gameMode && (
+              <div className="absolute top-2 left-2 text-xs bg-orange-500 text-white px-2 py-1 rounded">
+                {countdown > 0 && `⏱️ Salida en ${countdown}s - Ruta de ${routePoints.length} punto${routePoints.length !== 1 ? 's' : ''}`}
+                {isPlanning && countdown === 0 && `📍 Generando ruta de ${routePoints.length} punto${routePoints.length !== 1 ? 's' : ''}...`}
+                {isFlying && `🚁 Volando al punto ${currentPointIndex + 1}/${routePoints.length}`}
+                {!isPlanning && !isFlying && routePoints.length > 0 && routePoints.length < 3 && countdown === 0 && `✋ Añade más puntos (${routePoints.length}/3)`}
+              </div>
+            )}
+          </div>
         </div>
+        
+        {/* CSS Styles */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .drone-container {
+              position: absolute;
+              top: 50%;
+              left: -60px;
+              transform: translateY(-50%);
+              z-index: 2;
+              animation: flyAcross 8s ease-in-out infinite;
+            }
+            
+            .drone-container-game {
+              position: absolute;
+              left: ${dronePosition.x}px;
+              top: ${dronePosition.y}px;
+              transform: translate(-50%, -50%);
+              z-index: 2;
+              transition: none; /* Sin transición CSS, usamos animación manual */
+            }
+            
+            .drone {
+              animation: bounce 2s ease-in-out infinite, tilt 3s ease-in-out infinite;
+            }
+            
+            .drone-body {
+              position: relative;
+              width: 40px;
+              height: 40px;
+            }
+            
+            .drone-center {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 20px;
+              height: 20px;
+              background: linear-gradient(45deg, #ff8000, #ff6b35);
+              border-radius: 4px;
+              box-shadow: 0 2px 8px rgba(255, 128, 0, 0.3);
+            }
+            
+            .propeller {
+              position: absolute;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              background: rgba(255, 128, 0, 0.1);
+              border: 2px solid #ff8000;
+            }
+            
+            .propeller-1 { top: -4px; left: -4px; animation: spin 0.1s linear infinite; }
+            .propeller-2 { top: -4px; right: -4px; animation: spin 0.1s linear infinite reverse; }
+            .propeller-3 { bottom: -4px; left: -4px; animation: spin 0.1s linear infinite reverse; }
+            .propeller-4 { bottom: -4px; right: -4px; animation: spin 0.1s linear infinite; }
+            
+            .blade {
+              position: absolute;
+              background: #ff8000;
+              border-radius: 10px;
+            }
+            
+            .blade-1 {
+              top: 50%;
+              left: 2px;
+              right: 2px;
+              height: 2px;
+              transform: translateY(-50%);
+            }
+            
+            .blade-2 {
+              left: 50%;
+              top: 2px;
+              bottom: 2px;
+              width: 2px;
+              transform: translateX(-50%);
+            }
+            
+            .drone-trail {
+              animation: trailDraw 8s ease-in-out infinite;
+              stroke-dasharray: 0, 1000;
+            }
+            
+            @keyframes flyAcross {
+              0% { 
+                left: -60px;
+                transform: translateY(-50%) rotate(0deg) scale(0.8);
+              }
+              15% {
+                transform: translateY(-65%) rotate(15deg) scale(1);
+              }
+              30% {
+                transform: translateY(-35%) rotate(-10deg) scale(1.1);
+              }
+              45% {
+                transform: translateY(-60%) rotate(20deg) scale(0.9);
+              }
+              60% {
+                transform: translateY(-40%) rotate(-5deg) scale(1.05);
+              }
+              75% {
+                transform: translateY(-50%) rotate(10deg) scale(1);
+              }
+              100% { 
+                left: calc(100% + 60px);
+                transform: translateY(-50%) rotate(0deg) scale(0.8);
+              }
+            }
+            
+            @keyframes bounce {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-5px); }
+            }
+            
+            @keyframes tilt {
+              0%, 100% { transform: rotate(0deg); }
+              25% { transform: rotate(8deg); }
+              75% { transform: rotate(-8deg); }
+            }
+            
+            @keyframes spin {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+            
+            @keyframes trailDraw {
+              0% { stroke-dasharray: 0, 1000; opacity: 0; }
+              10% { opacity: 0.6; }
+              20% { stroke-dasharray: 200, 1000; }
+              80% { stroke-dasharray: 800, 1000; opacity: 0.6; }
+              100% { stroke-dasharray: 1000, 1000; opacity: 0; }
+            }
+            
+            /* Game Mode Animations */
+            .planning-curve {
+              stroke-dasharray: 10, 5;
+              animation: planningCurve 3s ease-in-out;
+            }
+            
+            .game-trail-curve {
+              stroke-dasharray: 5, 5;
+              animation: trailMoveCurve 3s ease-in-out;
+            }
+            
+            .game-trail-active {
+              stroke-dasharray: 5, 5;
+              animation: trailActive 1s ease-in-out infinite;
+            }
+            
+            .target-pulse {
+              animation: targetPulse 0.5s ease-in-out infinite alternate;
+            }
+            
+            .target-reached {
+              animation: targetReached 0.5s ease-out;
+            }
+            
+            .target-waiting {
+              animation: targetWaiting 2s ease-in-out infinite;
+            }
+            
+            .target-active {
+              animation: targetActive 1s ease-in-out infinite;
+            }
+            
+            .target-completed {
+              animation: targetCompleted 0.5s ease-out;
+            }
+            
+            @keyframes planningCurve {
+              0% { 
+                stroke-dasharray: 0, 1000; 
+                opacity: 0.3; 
+              }
+              30% { 
+                stroke-dasharray: 300, 1000; 
+                opacity: 0.8; 
+              }
+              100% { 
+                stroke-dasharray: 1000, 1000; 
+                opacity: 0.6; 
+              }
+            }
+            
+            @keyframes trailMoveCurve {
+              0% { 
+                stroke-dasharray: 1000, 1000; 
+                opacity: 0.6; 
+              }
+              100% { 
+                stroke-dasharray: 1000, 1000; 
+                opacity: 0.4; 
+              }
+            }
+            
+            @keyframes targetPulse {
+              0% { r: 4; opacity: 0.8; }
+              100% { r: 8; opacity: 0.4; }
+            }
+            
+            @keyframes targetReached {
+              0% { r: 6; opacity: 0.8; }
+              50% { r: 12; opacity: 1; }
+              100% { r: 6; opacity: 0.8; }
+            }
+            
+            @keyframes trailActive {
+              0%, 100% { opacity: 0.8; }
+              50% { opacity: 1; }
+            }
+            
+            @keyframes targetWaiting {
+              0%, 100% { opacity: 0.6; }
+              50% { opacity: 0.8; }
+            }
+            
+            @keyframes targetActive {
+              0%, 100% { opacity: 0.8; }
+              50% { opacity: 1; }
+            }
+            
+            @keyframes targetCompleted {
+              0% { opacity: 0.8; }
+              50% { opacity: 0.4; }
+              100% { opacity: 0.6; }
+            }
+            
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+              .drone-container {
+                animation: flyAcrossMobile 6s ease-in-out infinite;
+              }
+              
+              .drone-body {
+                width: 30px;
+                height: 30px;
+              }
+              
+              .drone-center {
+                width: 15px;
+                height: 15px;
+              }
+              
+              .propeller {
+                width: 12px;
+                height: 12px;
+              }
+              
+              @keyframes flyAcrossMobile {
+                0% { 
+                  left: -40px;
+                  transform: translateY(-50%) rotate(0deg) scale(0.7);
+                }
+                15% {
+                  transform: translateY(-60%) rotate(15deg) scale(0.9);
+                }
+                30% {
+                  transform: translateY(-40%) rotate(-10deg) scale(1);
+                }
+                45% {
+                  transform: translateY(-55%) rotate(20deg) scale(0.8);
+                }
+                60% {
+                  transform: translateY(-45%) rotate(-5deg) scale(0.95);
+                }
+                75% {
+                  transform: translateY(-50%) rotate(10deg) scale(0.9);
+                }
+                100% { 
+                  left: calc(100% + 40px);
+                  transform: translateY(-50%) rotate(0deg) scale(0.7);
+                }
+              }
+            }
+          `
+        }} />
       </section>
 
       {/* Introduction */}
