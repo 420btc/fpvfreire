@@ -493,72 +493,33 @@ const EquipmentPage = () => {
             Equipamiento profesional para producciones audiovisuales de alta calidad
           </p>
           
-                    {/* Game Mode Toggle - PC y Móvil */}
-          {(
-            <div className="mb-4">
-              <Button
-                size="sm"
-                variant={gameMode ? "solid" : "bordered"}
-                onPress={() => setGameMode(!gameMode)}
-                className={`text-sm ${
-                  gameMode 
-                    ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
-                    : 'border-orange-500 text-orange-500 hover:bg-orange-50'
-                }`}
-              >
-                {gameMode ? '🎮 Modo Juego ON' : '🎮 Activar Juego'}
-              </Button>
-              {gameMode && (
-                <div className="text-xs text-default-500 mt-2">
-                  <p>¡Crea una ruta de hasta 6 puntos! ({routePoints.length}/6)</p>
-                  {countdown > 0 && (
-                    <p className="text-orange-600 font-bold">
-                      ⏱️ Salida en {countdown}s (haz clic para añadir más puntos)
-                    </p>
-                  )}
-                  {routePoints.length > 0 && !isPlanning && !isFlying && countdown === 0 && (
-                    <Button
-                      size="sm"
-                      color="danger"
-                      variant="light"
-                      onPress={resetRoute}
-                      className="text-xs mt-1"
-                    >
-                      🗑️ Limpiar Ruta
-                    </Button>
-                  )}
-                </div>
-              )}
+                              {/* Telemetría Compacta - Solo arriba */}
+          {gameMode && (routePoints.length > 0 || isFlying) && (
+            <div className="mb-4 flex items-center justify-center gap-6 font-mono text-xs">
+              {/* Señal de Video */}
+              <div className="flex items-center gap-1">
+                <span className="text-gray-400">📹</span>
+                <span className="text-orange-500 font-medium">Señal de Video</span>
+                <span className={`font-bold ${getSignalColor(videoSignal)}`}>
+                  {videoSignal}%
+                </span>
+              </div>
               
-              {/* Telemetría Compacta */}
-              {gameMode && (routePoints.length > 0 || isFlying) && (
-                                 <div className="mt-2 flex items-center justify-center gap-6 font-mono text-xs">
-                   {/* Señal de Video */}
-                   <div className="flex items-center gap-1">
-                     <span className="text-gray-400">📹</span>
-                     <span className="text-orange-500 font-medium">Señal de Video</span>
-                     <span className={`font-bold ${getSignalColor(videoSignal)}`}>
-                       {videoSignal}%
-                     </span>
-                   </div>
-                   
-                   {/* Distancia */}
-                   <div className="flex items-center gap-1">
-                     <span className="text-gray-400">📏</span>
-                     <span className="text-orange-500 font-medium">Distancia</span>
-                     <span className="text-blue-400 font-bold">
-                       {isFlying 
-                         ? (currentDistance >= 1000 ? `${(currentDistance / 1000).toFixed(1)}km` : `${currentDistance}m`)
-                         : (totalDistance >= 1000 ? `${(totalDistance / 1000).toFixed(1)}km` : `${totalDistance}m`)
-                       }
-                     </span>
-                   </div>
-                  
-                                     {/* Alerta crítica compacta */}
-                   {videoSignal <= 15 && (
-                     <span className="text-red-500 animate-pulse font-bold">🚨</span>
-                   )}
-                </div>
+              {/* Distancia */}
+              <div className="flex items-center gap-1">
+                <span className="text-gray-400">📏</span>
+                <span className="text-orange-500 font-medium">Distancia</span>
+                <span className="text-blue-400 font-bold">
+                  {isFlying 
+                    ? (currentDistance >= 1000 ? `${(currentDistance / 1000).toFixed(1)}km` : `${currentDistance}m`)
+                    : (totalDistance >= 1000 ? `${(totalDistance / 1000).toFixed(1)}km` : `${totalDistance}m`)
+                  }
+                </span>
+              </div>
+              
+              {/* Alerta crítica compacta */}
+              {videoSignal <= 15 && (
+                <span className="text-red-500 animate-pulse font-bold">🚨</span>
               )}
             </div>
           )}
@@ -690,6 +651,43 @@ const EquipmentPage = () => {
                 {isPlanning && countdown === 0 && `📍 Generando ruta de ${routePoints.length} punto${routePoints.length !== 1 ? 's' : ''}...`}
                 {isFlying && `🚁 Volando al punto ${currentPointIndex + 1}/${routePoints.length}`}
                 {!isPlanning && !isFlying && routePoints.length > 0 && routePoints.length < 6 && countdown === 0 && `✋ Añade más puntos (${routePoints.length}/6)`}
+              </div>
+            )}
+          </div>
+          
+          {/* Game Mode Toggle - Debajo de la animación */}
+          <div className="mt-4 text-center">
+            <Button
+              size="sm"
+              variant={gameMode ? "solid" : "bordered"}
+              onPress={() => setGameMode(!gameMode)}
+              className={`text-sm ${
+                gameMode 
+                  ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
+                  : 'border-orange-500 text-orange-500 hover:bg-orange-50'
+              }`}
+            >
+              {gameMode ? '🎮 Modo Juego ON' : '🎮 Activar Juego'}
+            </Button>
+            {gameMode && (
+              <div className="text-xs text-default-500 mt-2">
+                <p>¡Crea una ruta de hasta 6 puntos! ({routePoints.length}/6)</p>
+                {countdown > 0 && (
+                  <p className="text-orange-600 font-bold">
+                    ⏱️ Salida en {countdown}s (haz clic para añadir más puntos)
+                  </p>
+                )}
+                {routePoints.length > 0 && !isPlanning && !isFlying && countdown === 0 && (
+                  <Button
+                    size="sm"
+                    color="danger"
+                    variant="light"
+                    onPress={resetRoute}
+                    className="text-xs mt-1"
+                  >
+                    🗑️ Limpiar Ruta
+                  </Button>
+                )}
               </div>
             )}
           </div>
