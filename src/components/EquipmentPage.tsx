@@ -197,7 +197,7 @@ const EquipmentPage = () => {
   }, []);
 
   const handleGameAreaClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || !gameMode || isPlanning || isFlying) return;
+    if (!gameMode || isPlanning || isFlying) return;
     
     const rect = gameAreaRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -503,8 +503,8 @@ const EquipmentPage = () => {
             Equipamiento profesional para producciones audiovisuales de alta calidad
           </p>
           
-                    {/* Game Mode Toggle - Solo PC */}
-          {!isMobile && (
+                    {/* Game Mode Toggle - PC y Móvil */}
+          {(
             <div className="mb-4">
               <Button
                 size="sm"
@@ -577,7 +577,7 @@ const EquipmentPage = () => {
           <div 
             ref={gameAreaRef}
             className={`relative h-32 w-full max-w-6xl mx-auto ${
-              gameMode && !isMobile ? 'cursor-crosshair' : ''
+              gameMode ? 'cursor-crosshair' : ''
             }`}
             onClick={handleGameAreaClick}
           >
