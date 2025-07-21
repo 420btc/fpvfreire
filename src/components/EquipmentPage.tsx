@@ -180,6 +180,9 @@ const EquipmentPage = () => {
   const [currentPointIndex, setCurrentPointIndex] = useState(0);
   const [dronePosition, setDronePosition] = useState({x: -60, y: 64});
   const [countdown, setCountdown] = useState(0);
+  const [videoSignal, setVideoSignal] = useState(100); // % de señal de video
+  const [totalDistance, setTotalDistance] = useState(0); // Distancia total en metros
+  const [currentDistance, setCurrentDistance] = useState(0); // Distancia actual durante el vuelo
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const countdownTimerRef = useRef<number | null>(null);
@@ -212,6 +215,9 @@ const EquipmentPage = () => {
       if (countdownTimerRef.current) {
         clearTimeout(countdownTimerRef.current);
       }
+      
+      // Calcular nueva distancia y afectar señal de video inmediatamente
+      updateTelemetry(newRoutePoints);
       
       // Iniciar countdown de 3 segundos
       setCountdown(3);
@@ -331,6 +337,9 @@ const EquipmentPage = () => {
       
       setDronePosition({x, y});
       
+      // Actualizar telemetría en tiempo real durante el vuelo
+      updateRealTimeTelemetry(progress, pointIndex, curves);
+      
       if (progress < 1) {
         requestAnimationFrame(animateStep);
       } else {
@@ -345,6 +354,123 @@ const EquipmentPage = () => {
     animateStep();
   };
 
+  const calculateRouteDistance = (points: {x: number, y: number, id: number}[]) => {
+    let totalDist = 0;
+    
+    for (let i = 0; i < points.length; i++) {
+      const startPoint = i === 0 
+        ? {x: dronePosition.x + 20, y: dronePosition.y}
+        : points[i - 1];
+      const endPoint = points[i];
+      
+      // Calcular distancia euclidiana y convertir píxeles a metros
+      // Área de ~1200px de ancho = 2.5km, por lo tanto 1px = ~2.08m
+      const distance = Math.sqrt(
+        Math.pow(endPoint.x - startPoint.x, 2) + 
+        Math.pow(endPoint.y - startPoint.y, 2)
+      ) * 2.08;
+      
+      totalDist += distance;
+    }
+    
+    return totalDist;
+  };
+
+  const updateTelemetry = (points: {x: number, y: number, id: number}[]) => {
+    const totalDist = calculateRouteDistance(points);
+    setTotalDistance(Math.round(totalDist));
+    // No actualizar señal aquí - se hará en tiempo real según posición del dron
+  };
+
+  const updateRealTimeTelemetry = (
+    progress: number, 
+    currentSegment: number, 
+    curves: {startX: number, startY: number, midX: number, midY: number, endX: number, endY: number}[]
+  ) => {
+    // Calcular posición actual del dron
+    const currentCurve = curves[currentSegment];
+    if (!currentCurve) return;
+    
+    const t = progress;
+    const currentX = Math.pow(1-t, 2) * currentCurve.startX + 2*(1-t)*t * currentCurve.midX + Math.pow(t, 2) * currentCurve.endX;
+    const currentY = Math.pow(1-t, 2) * currentCurve.startY + 2*(1-t)*t * currentCurve.midY + Math.pow(t, 2) * currentCurve.endY;
+    
+    // Calcular distancia desde el punto inicial (base del piloto) hasta posición actual del dron
+    const baseX = -40; // Posición inicial del dron
+    const baseY = 64;
+    const distanceFromBase = Math.sqrt(
+      Math.pow(currentX - baseX, 2) + 
+      Math.pow(currentY - baseY, 2)
+    ) * 2.08; // Convertir a metros (2.5km en ~1200px)
+    
+    console.log(`Dron en (${currentX.toFixed(1)}, ${currentY.toFixed(1)}) - Distancia desde base: ${distanceFromBase.toFixed(1)}m`);
+    
+    // Calcular distancia recorrida total (para telemetría)
+    let distanceFlown = 0;
+    
+    // Distancia de segmentos completados
+    for (let i = 0; i < currentSegment; i++) {
+      const curve = curves[i];
+      if (curve) {
+        const segmentDist = Math.sqrt(
+          Math.pow(curve.endX - curve.startX, 2) + 
+          Math.pow(curve.endY - curve.startY, 2)
+        ) * 2.08;
+        distanceFlown += segmentDist;
+      }
+    }
+    
+    // Distancia del segmento actual (parcial)
+    if (currentCurve) {
+      const segmentDist = Math.sqrt(
+        Math.pow(currentCurve.endX - currentCurve.startX, 2) + 
+        Math.pow(currentCurve.endY - currentCurve.startY, 2)
+      ) * 2.08;
+      distanceFlown += segmentDist * progress;
+    }
+    
+    setCurrentDistance(Math.round(distanceFlown));
+    
+    // Calcular señal basada en distancia desde la base con escala realista
+    let signalPercentage = 100;
+    
+    if (distanceFromBase <= 300) {
+      // 0-300m: De 100% a 70% (pérdida gradual de 30%)
+      signalPercentage = 100 - ((distanceFromBase / 300) * 30);
+    } else if (distanceFromBase <= 500) {
+      // 300-500m: De 70% a 60% (pérdida de 10% en 200m)
+      const progressIn200m = (distanceFromBase - 300) / 200;
+      signalPercentage = 70 - (progressIn200m * 10);
+    } else if (distanceFromBase <= 700) {
+      // 500-700m: De 60% a 55% (pérdida de 5% en 200m)
+      const progressIn200m = (distanceFromBase - 500) / 200;
+      signalPercentage = 60 - (progressIn200m * 5);
+    } else if (distanceFromBase <= 1000) {
+      // 700-1000m: De 55% a 45% (pérdida de 10% en 300m)
+      const progressIn300m = (distanceFromBase - 700) / 300;
+      signalPercentage = 55 - (progressIn300m * 10);
+    } else if (distanceFromBase <= 1300) {
+      // 1000-1300m: De 45% a 35% (pérdida de 10% en 300m)
+      const progressIn300m = (distanceFromBase - 1000) / 300;
+      signalPercentage = 45 - (progressIn300m * 10);
+    } else if (distanceFromBase <= 1600) {
+      // 1300-1600m: De 35% a 25% (pérdida de 10% en 300m)
+      const progressIn300m = (distanceFromBase - 1300) / 300;
+      signalPercentage = 35 - (progressIn300m * 10);
+    } else if (distanceFromBase <= 2000) {
+      // 1600-2000m: De 25% a 15% (pérdida de 10% en 400m)
+      const progressIn400m = (distanceFromBase - 1600) / 400;
+      signalPercentage = 25 - (progressIn400m * 10);
+    } else {
+      // Más de 2000m: Fluctuación aleatoria entre 5% y 10%
+      signalPercentage = 5 + Math.random() * 5; // Entre 5% y 10%
+    }
+    
+    const newSignal = Math.round(Math.max(5, signalPercentage));
+    console.log(`${distanceFromBase.toFixed(0)}m → ${newSignal}% señal`);
+    setVideoSignal(newSignal);
+  };
+
   const resetRoute = () => {
     if (countdownTimerRef.current) {
       clearTimeout(countdownTimerRef.current);
@@ -355,7 +481,16 @@ const EquipmentPage = () => {
     setIsPlanning(false);
     setCurrentPointIndex(0);
     setCountdown(0);
+    setVideoSignal(100);
+    setTotalDistance(0);
+    setCurrentDistance(0);
     setDronePosition({x: -60, y: 64});
+  };
+
+  const getSignalColor = (signal: number) => {
+    if (signal >= 70) return 'text-green-500';
+    if (signal >= 30) return 'text-orange-500';
+    return 'text-red-500';
   };
 
   return (
@@ -368,42 +503,73 @@ const EquipmentPage = () => {
             Equipamiento profesional para producciones audiovisuales de alta calidad
           </p>
           
-          {/* Game Mode Toggle - Solo PC */}
+                    {/* Game Mode Toggle - Solo PC */}
           {!isMobile && (
             <div className="mb-4">
-                             <Button
-                 size="sm"
-                 variant={gameMode ? "solid" : "bordered"}
-                 onPress={() => setGameMode(!gameMode)}
-                 className={`text-sm ${
-                   gameMode 
-                     ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
-                     : 'border-orange-500 text-orange-500 hover:bg-orange-50'
-                 }`}
-               >
+              <Button
+                size="sm"
+                variant={gameMode ? "solid" : "bordered"}
+                onPress={() => setGameMode(!gameMode)}
+                className={`text-sm ${
+                  gameMode 
+                    ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
+                    : 'border-orange-500 text-orange-500 hover:bg-orange-50'
+                }`}
+              >
                 {gameMode ? '🎮 Modo Juego ON' : '🎮 Activar Juego'}
               </Button>
-                             {gameMode && (
-                 <div className="text-xs text-default-500 mt-2">
-                   <p>¡Crea una ruta de hasta 6 puntos! ({routePoints.length}/6)</p>
-                   {countdown > 0 && (
-                     <p className="text-orange-600 font-bold">
-                       ⏱️ Salida en {countdown}s (haz clic para añadir más puntos)
-                     </p>
+              {gameMode && (
+                <div className="text-xs text-default-500 mt-2">
+                  <p>¡Crea una ruta de hasta 6 puntos! ({routePoints.length}/6)</p>
+                  {countdown > 0 && (
+                    <p className="text-orange-600 font-bold">
+                      ⏱️ Salida en {countdown}s (haz clic para añadir más puntos)
+                    </p>
+                  )}
+                  {routePoints.length > 0 && !isPlanning && !isFlying && countdown === 0 && (
+                    <Button
+                      size="sm"
+                      color="danger"
+                      variant="light"
+                      onPress={resetRoute}
+                      className="text-xs mt-1"
+                    >
+                      🗑️ Limpiar Ruta
+                    </Button>
+                  )}
+                </div>
+              )}
+              
+              {/* Telemetría Compacta */}
+              {gameMode && (routePoints.length > 0 || isFlying) && (
+                                 <div className="mt-2 flex items-center justify-center gap-6 font-mono text-xs">
+                   {/* Señal de Video */}
+                   <div className="flex items-center gap-1">
+                     <span className="text-gray-400">📹</span>
+                     <span className="text-orange-500 font-medium">Señal de Video</span>
+                     <span className={`font-bold ${getSignalColor(videoSignal)}`}>
+                       {videoSignal}%
+                     </span>
+                   </div>
+                   
+                   {/* Distancia */}
+                   <div className="flex items-center gap-1">
+                     <span className="text-gray-400">📏</span>
+                     <span className="text-orange-500 font-medium">Distancia</span>
+                     <span className="text-blue-400 font-bold">
+                       {isFlying 
+                         ? (currentDistance >= 1000 ? `${(currentDistance / 1000).toFixed(1)}km` : `${currentDistance}m`)
+                         : (totalDistance >= 1000 ? `${(totalDistance / 1000).toFixed(1)}km` : `${totalDistance}m`)
+                       }
+                     </span>
+                   </div>
+                  
+                                     {/* Alerta crítica compacta */}
+                   {videoSignal <= 15 && (
+                     <span className="text-red-500 animate-pulse font-bold">🚨</span>
                    )}
-                   {routePoints.length > 0 && !isPlanning && !isFlying && countdown === 0 && (
-                     <Button
-                       size="sm"
-                       color="danger"
-                       variant="light"
-                       onPress={resetRoute}
-                       className="text-xs mt-1"
-                     >
-                       🗑️ Limpiar Ruta
-                     </Button>
-                   )}
-                 </div>
-               )}
+                </div>
+              )}
             </div>
           )}
 
