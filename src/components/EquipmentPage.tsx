@@ -15,9 +15,7 @@ import {
   GiBattery100
 } from 'react-icons/gi';
 import { 
-  MdHighQuality,
-  MdSpeed,
-  MdPrecisionManufacturing
+  MdSpeed
 } from 'react-icons/md';
 import { 
   SiAdobe
@@ -38,7 +36,7 @@ const equipmentCategories = [
       {
         name: 'Flywoo LR4 DJI O3',
         specs: 'Long Range, Sub250g, 4K/60fps, 30min vuelo',
-        icon: <FaWifi className="text-2xl text-orange-400" />
+        icon: <FaPlane className="text-2xl text-orange-400" />
       },
       {
         name: 'DJI Mini 2',
@@ -48,12 +46,12 @@ const equipmentCategories = [
       {
         name: 'Manta 5 DJI O3 6S',
         specs: 'Racing 5", DJI O3, Alta velocidad',
-        icon: <MdSpeed className="text-2xl text-orange-400" />
+        icon: <FaPlane className="text-2xl text-orange-400" />
       },
       {
         name: 'Chimera 7 DJI O3 6S',
         specs: 'Long Range 7", DJI O3, Máximo alcance 30km',
-        icon: <FaWifi className="text-2xl text-orange-400" />
+        icon: <FaPlane className="text-2xl text-orange-400" />
       }
     ]
   },
@@ -66,7 +64,7 @@ const equipmentCategories = [
       {
         name: 'GoPro Hero 12 Black Naked',
         specs: '5.3K/60fps, HyperSmooth 6.0',
-        icon: <MdHighQuality className="text-2xl text-orange-400" />
+        icon: <FaVideo className="text-2xl text-orange-400" />
       },
       {
         name: 'DJI Action 4',
@@ -76,7 +74,7 @@ const equipmentCategories = [
       {
         name: 'Insta360 X3',
         specs: '360°, 5.7K, Estabilización FlowState',
-        icon: <MdPrecisionManufacturing className="text-2xl text-orange-400" />
+        icon: <FaVideo className="text-2xl text-orange-400" />
       },
       {
         name: 'Fujifilm XT2',
@@ -104,7 +102,7 @@ const equipmentCategories = [
       {
         name: 'LiPo 4S 1500mAh',
         specs: 'Cinewhoop, larga duración',
-        icon: <FaBatteryFull className="text-2xl text-orange-400" />
+        icon: <GiBattery100 className="text-2xl text-orange-400" />
       },
       {
         name: 'Power Bank 20000mAh',
@@ -127,7 +125,7 @@ const equipmentCategories = [
       {
         name: 'DaVinci Resolve Studio',
         specs: 'Edición profesional, Color grading',
-        icon: <FaVideo className="text-2xl text-orange-400" />
+        icon: <MdSpeed className="text-2xl text-orange-400" />
       },
       {
         name: 'Adobe Premiere Pro',
@@ -137,7 +135,7 @@ const equipmentCategories = [
       {
         name: 'Final Cut Pro',
         specs: 'Edición optimizada para Mac',
-        icon: <FaVideo className="text-2xl text-orange-400" />
+        icon: <MdSpeed className="text-2xl text-orange-400" />
       },
       {
         name: 'Adobe After Effects',
