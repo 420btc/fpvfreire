@@ -202,8 +202,8 @@ const EquipmentPage = () => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    // Añadir nuevo punto a la ruta (máximo 3)
-    if (routePoints.length < 3) {
+    // Añadir nuevo punto a la ruta (máximo 6)
+    if (routePoints.length < 6) {
       const newPoint = {x, y, id: Date.now()};
       const newRoutePoints = [...routePoints, newPoint];
       setRoutePoints(newRoutePoints);
@@ -218,7 +218,7 @@ const EquipmentPage = () => {
       startCountdown(newRoutePoints);
       
       // Si llegamos al máximo, empezar inmediatamente
-      if (newRoutePoints.length === 3) {
+      if (newRoutePoints.length === 6) {
         setCountdown(0);
         if (countdownTimerRef.current) {
           clearTimeout(countdownTimerRef.current);
@@ -315,7 +315,7 @@ const EquipmentPage = () => {
     }
     
     const curve = curves[pointIndex];
-    const duration = 3000; // 3 segundos
+    const duration = 2250; // 25% más rápido (3000 * 0.75 = 2250ms)
     const startTime = Date.now();
     
     console.log('Starting animation for point', pointIndex, 'with curve:', curve);
@@ -371,18 +371,21 @@ const EquipmentPage = () => {
           {/* Game Mode Toggle - Solo PC */}
           {!isMobile && (
             <div className="mb-4">
-              <Button
-                size="sm"
-                variant={gameMode ? "solid" : "bordered"}
-                color="warning"
-                onPress={() => setGameMode(!gameMode)}
-                className="text-sm"
-              >
+                             <Button
+                 size="sm"
+                 variant={gameMode ? "solid" : "bordered"}
+                 onPress={() => setGameMode(!gameMode)}
+                 className={`text-sm ${
+                   gameMode 
+                     ? 'bg-orange-500 hover:bg-orange-600 text-white border-orange-500' 
+                     : 'border-orange-500 text-orange-500 hover:bg-orange-50'
+                 }`}
+               >
                 {gameMode ? '🎮 Modo Juego ON' : '🎮 Activar Juego'}
               </Button>
                              {gameMode && (
                  <div className="text-xs text-default-500 mt-2">
-                   <p>¡Crea una ruta de hasta 3 puntos! ({routePoints.length}/3)</p>
+                   <p>¡Crea una ruta de hasta 6 puntos! ({routePoints.length}/6)</p>
                    {countdown > 0 && (
                      <p className="text-orange-600 font-bold">
                        ⏱️ Salida en {countdown}s (haz clic para añadir más puntos)
@@ -457,7 +460,7 @@ const EquipmentPage = () => {
                   {routePoints.length === 0 && (
                     <path 
                       className="drone-trail"
-                      d={`M-50,64 Q${200 + (Math.sin(Date.now() * 0.001) * 50)},${44 + (Math.cos(Date.now() * 0.001) * 10)} ${400 + (Math.sin(Date.now() * 0.002) * 30)},69 T${800 + (Math.cos(Date.now() * 0.001) * 40)},59 Q1000,54 1200,64`}
+                      d="M-50,64 Q200,44 400,69 T800,59 Q1000,54 1200,64"
                       stroke="#ff8000"
                       strokeWidth="2"
                       fill="none"
@@ -466,8 +469,8 @@ const EquipmentPage = () => {
                     />
                   )}
                   
-                  {/* Puntos de la ruta */}
-                  {routePoints.map((point, index) => (
+                  {/* Puntos de la ruta - Solo en modo juego */}
+                  {gameMode && routePoints.map((point, index) => (
                     <g key={point.id}>
                       <circle
                         cx={point.x}
@@ -525,12 +528,12 @@ const EquipmentPage = () => {
             </div>
 
             {/* Status Indicators */}
-            {gameMode && (
+            {gameMode && (countdown > 0 || isPlanning || isFlying || (routePoints.length > 0 && routePoints.length < 6)) && (
               <div className="absolute top-2 left-2 text-xs bg-orange-500 text-white px-2 py-1 rounded">
                 {countdown > 0 && `⏱️ Salida en ${countdown}s - Ruta de ${routePoints.length} punto${routePoints.length !== 1 ? 's' : ''}`}
                 {isPlanning && countdown === 0 && `📍 Generando ruta de ${routePoints.length} punto${routePoints.length !== 1 ? 's' : ''}...`}
                 {isFlying && `🚁 Volando al punto ${currentPointIndex + 1}/${routePoints.length}`}
-                {!isPlanning && !isFlying && routePoints.length > 0 && routePoints.length < 3 && countdown === 0 && `✋ Añade más puntos (${routePoints.length}/3)`}
+                {!isPlanning && !isFlying && routePoints.length > 0 && routePoints.length < 6 && countdown === 0 && `✋ Añade más puntos (${routePoints.length}/6)`}
               </div>
             )}
           </div>
@@ -597,21 +600,22 @@ const EquipmentPage = () => {
               position: absolute;
               background: #ff8000;
               border-radius: 10px;
+              opacity: 0.6;
             }
             
             .blade-1 {
               top: 50%;
-              left: 2px;
-              right: 2px;
-              height: 2px;
+              left: 4px;
+              right: 4px;
+              height: 1px;
               transform: translateY(-50%);
             }
             
             .blade-2 {
               left: 50%;
-              top: 2px;
-              bottom: 2px;
-              width: 2px;
+              top: 4px;
+              bottom: 4px;
+              width: 1px;
               transform: translateX(-50%);
             }
             
