@@ -2,7 +2,7 @@ import { Card, CardBody, CardFooter, Button, Input, Textarea, Modal, ModalConten
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const servicesData = [
   {
@@ -30,7 +30,7 @@ const servicesData = [
     title: "Colegios",
     description: "Servicios especializados para centros educativos. Documentación de instalaciones, eventos deportivos y actividades académicas desde una perspectiva única.",
     image: "/images/colegio.jpg",
-    price: "Desde 100€",
+    price: "Desde 200€",
     features: ["Documentación escolar", "Eventos deportivos", "Promoción institucional"]
   },
   {
@@ -168,9 +168,17 @@ const ServicesPage = () => {
       <section className="py-16 bg-gradient-to-b from-content1 to-background">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Nuestros Servicios</h1>
-          <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto mb-8">
             Descubre todos los servicios que ofrecemos con drones FPV
           </p>
+          <Link to="/portfolio">
+            <Button 
+              size="lg"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
+            >
+              VER PORTFOLIO
+            </Button>
+          </Link>
         </div>
       </section>
 
