@@ -58,7 +58,7 @@ const servicesData = [
     title: "Publicidad y Marketing",
     description: "Contenido visual para promocionar tu negocio, producto o servicio. Campañas publicitarias con impacto visual garantizado.",
     image: "/images/blicidad.jpg",
-    price: "Desde 60€",
+    price: "Desde 80€",
     features: ["Campañas publicitarias", "Contenido para redes", "Branding empresarial"]
   },
   {
