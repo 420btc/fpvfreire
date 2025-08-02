@@ -41,8 +41,13 @@ const NavbarComponent = () => {
             </RouterLink>
           </NavbarItem>
           <NavbarItem>
-            <RouterLink to="/portfolio" className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors">
-              Portfolio
+            <RouterLink to="/portfolio" className="text-sm font-medium relative group">
+              <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent bg-[length:0%_100%] group-hover:bg-[length:100%_100%] transition-all duration-1000 ease-out bg-no-repeat animate-pulse">
+                Portfolio
+              </span>
+              <span className="absolute inset-0 text-foreground group-hover:opacity-0 transition-opacity duration-1000">
+                Portfolio
+              </span>
             </RouterLink>
           </NavbarItem>
           <NavbarItem>
