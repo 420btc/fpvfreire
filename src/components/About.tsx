@@ -1,6 +1,7 @@
 import { Card, CardBody, Button } from "@heroui/react";
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 const About = () => {
   const [currentVideo, setCurrentVideo] = useState(0);
@@ -72,6 +73,13 @@ const About = () => {
               >
                 <ChevronLeftIcon className="h-5 w-5" />
               </Button>
+              <Link to="/portfolio">
+                <Button
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2"
+                >
+                  Ver Portfolio
+                </Button>
+              </Link>
               <Button
                 isIconOnly
                 className="bg-orange-500 hover:bg-orange-600 text-white"

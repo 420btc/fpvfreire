@@ -11,6 +11,7 @@ import ServicesPage from './components/ServicesPage';
 import AboutPage from './components/AboutPage';
 import EquipmentPage from './components/EquipmentPage';
 import ContactPage from './components/ContactPage';
+import PortfolioPage from './components/PortfolioPage';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import GlobalDraggableChat from './components/GlobalDraggableChat';
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/quien-soy" element={<AboutPage />} />
                 <Route path="/mi-equipo" element={<EquipmentPage />} />
                 <Route path="/contacto" element={<ContactPage />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
               </Routes>
               <Footer />
               <GlobalDraggableChat />
