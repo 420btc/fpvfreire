@@ -41,6 +41,11 @@ const NavbarComponent = () => {
             </RouterLink>
           </NavbarItem>
           <NavbarItem>
+            <RouterLink to="/portfolio" className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors">
+              Portfolio
+            </RouterLink>
+          </NavbarItem>
+          <NavbarItem>
             <RouterLink to="/contacto" className="text-sm font-medium text-foreground hover:text-orange-500 transition-colors">
               Contacto
             </RouterLink>
@@ -116,6 +121,13 @@ const NavbarComponent = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Mi Equipo
+            </RouterLink>
+            <RouterLink 
+              to="/portfolio" 
+              className="text-orange-500 text-lg font-medium py-2 hover:text-orange-400 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Portfolio
             </RouterLink>
             <RouterLink 
               to="/contacto" 

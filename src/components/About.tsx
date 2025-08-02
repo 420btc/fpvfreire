@@ -1,6 +1,6 @@
 import { Card, CardBody, Button } from "@heroui/react";
 import { useState, useEffect } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon, PlayIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
 const About = () => {
@@ -72,13 +72,14 @@ const About = () => {
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
                     <div className="text-center animate-pulse">
                       <Link to="/portfolio">
-                        <Button
-                          size="lg"
-                          className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 text-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
-                        >
-                          VER PORTFOLIO
-                        </Button>
-                      </Link>
+                         <Button
+                           size="lg"
+                           className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 text-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
+                           startContent={<PlayIcon className="h-6 w-6" />}
+                         >
+                           VER PORTFOLIO
+                         </Button>
+                       </Link>
                       <p className="text-white mt-4 text-lg font-semibold">
                         Descubre más videos en nuestro portfolio
                       </p>
@@ -102,6 +103,7 @@ const About = () => {
               <Link to="/portfolio">
                 <Button
                   className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 md:px-12 md:py-4 md:text-lg md:min-w-[200px]"
+                  startContent={<PlayIcon className="h-5 w-5" />}
                 >
                   Ver Portfolio
                 </Button>

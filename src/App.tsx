@@ -67,7 +67,7 @@ const HomePage = () => (
                       size="lg"
                       className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
                     >
-                      VER PORTFOLIO
+                      VER PORTFOLIO WEB
                     </Button>
                   </a>
                 </div>
