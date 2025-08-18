@@ -265,6 +265,34 @@ const ServicesPage = () => {
         </div>
       </section>
 
+      {/* Stripe Payment Section */}
+      <section className="py-16 bg-content1">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">
+             Compra Directa - Servicio de Grabación FPV
+           </h2>
+          <div className="max-w-md mx-auto">
+            <Card className="p-6">
+              <CardBody className="text-center">
+                <h3 className="text-xl font-bold mb-4">Servicio de Grabación FPV</h3>
+                <p className="text-default-600 mb-4">Servicio VIDEO completo</p>
+                <div className="text-3xl font-bold text-orange-500 mb-6">150€</div>
+                <Button 
+                  size="lg"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3"
+                  as="a"
+                  href="https://buy.stripe.com/6oUeV54Yq872cKZ5JOcV200"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  COMPRAR AHORA
+                </Button>
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Modal de Solicitud */}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
         <ModalContent>
