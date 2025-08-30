@@ -3,6 +3,150 @@ import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// Componente del dron animado
+const AnimatedDrone = () => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar si es móvil
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Trayectoria para PC (amplia)
+  const flightPathDesktop = [
+    { x: 0, y: 0, rotation: 0 },
+    { x: 150, y: -50, rotation: 15 },
+    { x: 300, y: -80, rotation: 45 },
+    { x: 450, y: -30, rotation: -30 },
+    { x: 500, y: 50, rotation: 90 },
+    { x: 400, y: 120, rotation: 180 },
+    { x: 250, y: 150, rotation: -45 },
+    { x: 100, y: 100, rotation: -90 },
+    { x: 50, y: 20, rotation: 360 },
+    { x: 200, y: -100, rotation: 720 },
+    { x: 350, y: -120, rotation: 450 },
+    { x: 480, y: -60, rotation: 180 },
+    { x: 520, y: 80, rotation: -180 },
+    { x: 300, y: 180, rotation: 270 },
+    { x: 80, y: 140, rotation: -270 },
+    { x: 0, y: 0, rotation: 0 }
+  ];
+
+  // Trayectoria para móvil (compacta, alrededor del PNG)
+  const flightPathMobile = [
+    { x: 0, y: 0, rotation: 0 },
+    { x: 60, y: -40, rotation: 45 },
+    { x: 80, y: -20, rotation: 90 },
+    { x: 100, y: 20, rotation: 135 },
+    { x: 80, y: 60, rotation: 180 },
+    { x: 40, y: 80, rotation: 225 },
+    { x: -20, y: 60, rotation: 270 },
+    { x: -40, y: 20, rotation: 315 },
+    { x: -20, y: -20, rotation: 360 },
+    { x: 20, y: -60, rotation: 45 },
+    { x: 60, y: -40, rotation: 90 },
+    { x: 80, y: 0, rotation: 135 },
+    { x: 60, y: 40, rotation: 180 },
+    { x: 20, y: 60, rotation: 225 },
+    { x: -20, y: 40, rotation: 270 },
+    { x: 0, y: 0, rotation: 0 }
+  ];
+
+  const flightPath = isMobile ? flightPathMobile : flightPathDesktop;
+
+  useEffect(() => {
+    const animateFlight = () => {
+      setIsAnimating(true);
+      setCurrentStep(0);
+      
+      const stepDuration = 1800; // 1.8 segundos por paso
+      
+      const animateStep = (step: number) => {
+        if (step < flightPath.length) {
+          setCurrentStep(step);
+          setRotation(flightPath[step].rotation);
+          
+          setTimeout(() => {
+            animateStep(step + 1);
+          }, stepDuration);
+        } else {
+          setIsAnimating(false);
+          setCurrentStep(0);
+          setRotation(0);
+        }
+      };
+      
+      animateStep(0);
+    };
+
+    // Iniciar inmediatamente la primera animación
+    const initialTimeout = setTimeout(animateFlight, 1000);
+    
+    // Luego repetir cada 30 segundos
+    const interval = setInterval(animateFlight, 30000);
+    
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, [flightPath]);
+
+  const currentPosition = flightPath[currentStep] || { x: 0, y: 0, rotation: 0 };
+
+  return (
+    <div 
+      className={`absolute ${isMobile ? 'top-8 right-8' : 'top-16 right-16'} transition-all duration-1800 ease-in-out z-10 ${
+        isAnimating ? 'opacity-100' : 'opacity-70'
+      }`}
+      style={{
+        transform: `translate(${currentPosition.x}px, ${currentPosition.y}px) rotate(${rotation}deg)`,
+        transition: isAnimating ? 'all 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'all 0.5s ease-out'
+      }}
+    >
+      <svg
+        width={isMobile ? "30" : "40"}
+        height={isMobile ? "30" : "40"}
+        viewBox="0 0 100 100"
+        className="drop-shadow-lg"
+      >
+        {/* Cuerpo principal del dron */}
+        <rect x="35" y="40" width="30" height="20" rx="4" fill="#f97316" />
+        
+        {/* Brazos del dron */}
+        <rect x="15" y="47" width="20" height="6" rx="3" fill="#ea580c" />
+        <rect x="65" y="47" width="20" height="6" rx="3" fill="#ea580c" />
+        <rect x="47" y="15" width="6" height="20" rx="3" fill="#ea580c" />
+        <rect x="47" y="65" width="6" height="20" rx="3" fill="#ea580c" />
+        
+        {/* Motores en las puntas */}
+        <circle cx="25" cy="25" r="6" fill="#dc2626" />
+        <circle cx="75" cy="25" r="6" fill="#dc2626" />
+        <circle cx="25" cy="75" r="6" fill="#dc2626" />
+        <circle cx="75" cy="75" r="6" fill="#dc2626" />
+        
+        {/* Centro/cámara */}
+        <circle cx="50" cy="50" r="8" fill="#1f2937" />
+        <circle cx="50" cy="50" r="4" fill="#3b82f6" opacity="0.8" />
+        
+        {/* LED indicador */}
+        <circle cx="50" cy="35" r="2" fill="#10b981" className={isAnimating ? 'animate-pulse' : ''} />
+        
+        {/* Flecha direccional */}
+        <polygon points="50,25 55,35 45,35" fill="#fbbf24" />
+      </svg>
+    </div>
+  );
+};
+
 const skills = [
   { name: "Pilotaje FPV", percentage: 95 },
   { name: "Edición de Video", percentage: 90 },
@@ -138,6 +282,20 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Image Section */}
+       <section className="py-16">
+         <div className="container mx-auto px-4 text-center">
+           <div className="max-w-2xl mx-auto relative">
+             <img
+                src="/images/yoiso.png"
+                alt="Carlos Pastor Freire"
+                className="w-full h-auto"
+              />
+             <AnimatedDrone />
+           </div>
+         </div>
+       </section>
 
       {/* Equipment Section */}
       <section className="py-16">
