@@ -47,18 +47,6 @@ const ChatBot = () => {
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
-    
-    // Límite de 10 mensajes (excluyendo el mensaje inicial del bot)
-    if (messages.length >= 11) {
-      const limitMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'Has alcanzado el límite de 10 mensajes. Para más consultas, por favor contacta directamente conmigo.',
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, limitMessage]);
-      return;
-    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -72,14 +60,12 @@ const ChatBot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
           messages: [
             {
               role: 'system',
@@ -89,9 +75,7 @@ const ChatBot = () => {
               role: 'user',
               content: inputMessage
             }
-          ],
-          max_tokens: 500,
-          temperature: 0.7
+          ]
         })
       });
 
@@ -102,7 +86,7 @@ const ChatBot = () => {
       const data = await response.json();
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.choices[0].message.content,
+        text: data.message,
         isUser: false,
         timestamp: new Date()
       };
