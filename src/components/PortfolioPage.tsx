@@ -181,15 +181,15 @@ const PortfolioPage = () => {
             </Card>
 
             {/* Video 7 */}
-              <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 blur-sm pointer-events-none opacity-60 relative">
-                <div className="absolute top-3 right-3 z-10">
-                  <FaHome className="text-orange-500 text-xl" />
-                </div>
-                <CardHeader className="pb-0">
-                  <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                    Villa Cortijo Maza
-                  </h3>
-                </CardHeader>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+               <div className="absolute top-3 right-3 z-10">
+                 <FaHome className="text-orange-500 text-xl" />
+               </div>
+               <CardHeader className="pb-0">
+                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                   Villa Cortijo Maza
+                 </h3>
+               </CardHeader>
                <CardBody>
                  <div className="aspect-video rounded-lg overflow-hidden mb-4">
                     <iframe
@@ -205,20 +205,29 @@ const PortfolioPage = () => {
                 </CardBody>
              </Card>
 
-            {/* Video 8 - Coming Soon */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 blur-sm pointer-events-none opacity-60">
+            {/* Video 8 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+               <div className="absolute top-3 right-3 z-10">
+                 <FaHome className="text-orange-500 text-xl" />
+               </div>
                <CardHeader className="pb-0">
                  <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Coming Soon
+                   Villa Verdolaga
                  </h3>
                </CardHeader>
                <CardBody>
-                 <div className="aspect-video bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4">
-                   <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">
-                     Próximamente
-                   </p>
+                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
+                   <iframe
+                     width="100%"
+                     height="100%"
+                     src="https://www.youtube.com/embed/TsNCYGurxDE"
+                     title="Villa Verdolaga"
+                     frameBorder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowFullScreen
+                   ></iframe>
                  </div>
-                </CardBody>
+               </CardBody>
              </Card>
 
             {/* Video 9 - Coming Soon */}
