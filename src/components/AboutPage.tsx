@@ -306,12 +306,14 @@ const AboutPage = () => {
             contenido audiovisual de alta calidad.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
-            >
-              VER MI EQUIPAMIENTO
-            </Button>
+            <Link to="/mi-equipo">
+              <Button 
+                size="lg"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
+              >
+                VER MI EQUIPAMIENTO
+              </Button>
+            </Link>
             <Link to="/portfolio">
               <Button 
                 size="lg"
