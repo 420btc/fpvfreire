@@ -222,6 +222,14 @@ const GlobalDraggableChat: React.FC = () => {
     }
   };
 
+  // Limpiar historial de mensajes
+  const clearHistory = () => {
+    setMessages([]);
+    try {
+      localStorage.removeItem('chatMessages');
+    } catch {}
+  };
+
   return (
     <>
       {/* Botón flotante fijo en esquina inferior derecha */}
@@ -274,6 +282,16 @@ const GlobalDraggableChat: React.FC = () => {
                 onPress={() => setIsOpen(false)}
               >
                 <Icon icon="mdi:minus" width={16} height={16} />
+              </Button>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                className="text-white hover:bg-orange-600"
+                onPress={clearHistory}
+                title="Borrar historial"
+              >
+                <Icon icon="mdi:trash-can-outline" width={16} height={16} />
               </Button>
               <Button
                 isIconOnly

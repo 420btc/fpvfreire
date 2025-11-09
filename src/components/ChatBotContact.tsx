@@ -118,6 +118,11 @@ const ChatBotContact = () => {
     }
   };
 
+  // Limpiar historial de mensajes (solo estado local de este chat)
+  const clearHistory = () => {
+    setMessages([]);
+  };
+
   return (
     <div className="fixed right-2 md:right-6 top-1/2 transform -translate-y-1/2 z-50">
       {/* Botón flotante */}
@@ -132,7 +137,7 @@ const ChatBotContact = () => {
       )}
 
       {/* Ventana de chat */}
-      {isOpen && (
+          {isOpen && (
         <Card className="w-80 h-80 md:w-96 md:h-96 shadow-2xl border border-orange-200">
           <CardHeader className="bg-orange-500 text-white p-4 flex justify-between items-center">
             <div className="flex items-center space-x-2">
@@ -142,15 +147,27 @@ const ChatBotContact = () => {
                 <p className="text-xs opacity-90">Experto en drones</p>
               </div>
             </div>
-            <Button
-              isIconOnly
-              size="sm"
-              variant="light"
-              className="text-white hover:bg-orange-600"
-              onPress={() => setIsOpen(false)}
-            >
-              <Icon icon="mdi:close" width={20} height={20} />
-            </Button>
+            <div className="flex space-x-1">
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                className="text-white hover:bg-orange-600"
+                onPress={clearHistory}
+                title="Borrar historial"
+              >
+                <Icon icon="mdi:trash-can-outline" width={18} height={18} />
+              </Button>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                className="text-white hover:bg-orange-600"
+                onPress={() => setIsOpen(false)}
+              >
+                <Icon icon="mdi:close" width={20} height={20} />
+              </Button>
+            </div>
           </CardHeader>
           
           <CardBody className="p-0 flex flex-col h-full">
