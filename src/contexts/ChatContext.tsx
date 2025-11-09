@@ -6,6 +6,8 @@ interface Message {
   isUser: boolean;
   timestamp: Date;
   responseTime?: number; // Tiempo de respuesta en segundos
+  ctaLink?: string;
+  ctaLabel?: string;
 }
 
 interface ChatPosition {

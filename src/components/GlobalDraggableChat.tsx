@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardBody, CardHeader, Button, Input } from '@heroui/react';
 import { Icon } from '@iconify/react';
+import { Link } from 'react-router-dom';
 import { useChatContext } from '../contexts/ChatContext';
 
 interface Message {
@@ -9,6 +10,8 @@ interface Message {
   isUser: boolean;
   timestamp: Date;
   responseTime?: number; // Tiempo de respuesta en segundos
+  ctaLink?: string;
+  ctaLabel?: string;
 }
 
 const GlobalDraggableChat: React.FC = () => {
@@ -175,6 +178,25 @@ const GlobalDraggableChat: React.FC = () => {
       };
 
       setMessages(prev => [...prev, botResponse]);
+
+      // Detectar intención de contacto y añadir CTA dentro del chat
+      const hasContactIntent = (text: string) => {
+        const keywords = ['contactar', 'contacto', 'contratar', 'presupuesto', 'llamar', 'escribirte', 'hablar contigo'];
+        const lower = text.toLowerCase();
+        return keywords.some(k => lower.includes(k));
+      };
+
+      if (hasContactIntent(userMessage.text)) {
+        const ctaMessage: Message = {
+          id: (Date.now() + 2).toString(),
+          text: '¿Te gustaría continuar por contacto directo? Pulsa el botón para ir a la página de contacto.',
+          isUser: false,
+          timestamp: new Date(),
+          ctaLink: '/contacto',
+          ctaLabel: 'Contactar Ahora'
+        };
+        setMessages(prev => [...prev, ctaMessage]);
+      }
     } catch (error) {
       console.error('Error:', error);
       const endTime = Date.now();
@@ -298,6 +320,16 @@ const GlobalDraggableChat: React.FC = () => {
                         </span>
                       )}
                     </div>
+                    {/* CTA de contacto dentro de la conversación */}
+                    {!message.isUser && message.ctaLink && (
+                      <div className="mt-3">
+                        <Link to={message.ctaLink}>
+                          <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold">
+                            {message.ctaLabel || 'Contactar'}
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
