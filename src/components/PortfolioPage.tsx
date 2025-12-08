@@ -1,5 +1,5 @@
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import { FaHome, FaGlassCheers } from 'react-icons/fa';
+import { FaHome, FaGlassCheers, FaBuilding } from 'react-icons/fa';
 
 const PortfolioPage = () => {
   return (
@@ -230,8 +230,74 @@ const PortfolioPage = () => {
                </CardBody>
              </Card>
 
-            {/* Video 9 - Coming Soon */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 blur-sm pointer-events-none opacity-60">
+            {/* Video 9 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+               <div className="absolute top-3 right-3 z-10">
+                 <FaBuilding className="text-orange-500 text-xl" />
+               </div>
+               <CardHeader className="pb-0">
+                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                   Colegio Maravillas
+                 </h3>
+               </CardHeader>
+               <CardBody>
+                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
+                   <iframe
+                     width="100%"
+                     height="100%"
+                     src="https://www.youtube.com/embed/-SNCQ9TY_5A"
+                     title="Colegio Maravillas"
+                     frameBorder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowFullScreen
+                   ></iframe>
+                 </div>
+               </CardBody>
+             </Card>
+
+            {/* Video 10 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+               <div className="absolute top-3 right-3 z-10">
+                 <FaHome className="text-orange-500 text-xl" />
+               </div>
+               <CardHeader className="pb-0">
+                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                   Villa Velázquez FPV
+                 </h3>
+               </CardHeader>
+               <CardBody>
+                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
+                   <iframe
+                     width="100%"
+                     height="100%"
+                     src="https://www.youtube.com/embed/Ew-3-vLgOys"
+                     title="Villa Velázquez FPV"
+                     frameBorder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allowFullScreen
+                   ></iframe>
+                 </div>
+               </CardBody>
+             </Card>
+
+            {/* Video 11 - Coming Soon */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+               <CardHeader className="pb-0">
+                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+                   Coming Soon
+                 </h3>
+               </CardHeader>
+               <CardBody>
+                 <div className="aspect-video bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4">
+                   <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">
+                     Próximamente
+                   </p>
+                 </div>
+                </CardBody>
+             </Card>
+
+            {/* Video 12 - Coming Soon */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
                <CardHeader className="pb-0">
                  <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
                    Coming Soon
