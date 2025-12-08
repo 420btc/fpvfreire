@@ -43,12 +43,13 @@ const PortfolioPage = () => {
               <CardBody>
                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                   <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/Wc61WUZAiFE"
+                     src="https://www.youtube.com/embed/Wc61WUZAiFE?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa Aurora"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                 </div>
@@ -68,12 +69,13 @@ const PortfolioPage = () => {
               <CardBody>
                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                   <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/v3Stsgpk55g"
+                     src="https://www.youtube.com/embed/v3Stsgpk55g?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa Camelia"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                 </div>
@@ -93,12 +95,13 @@ const PortfolioPage = () => {
               <CardBody>
                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                   <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/p5nh2fKd8kg"
+                     src="https://www.youtube.com/embed/p5nh2fKd8kg?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa Coto"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                 </div>
@@ -118,12 +121,13 @@ const PortfolioPage = () => {
               <CardBody>
                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                   <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/lfafRB6PlU8"
+                     src="https://www.youtube.com/embed/lfafRB6PlU8?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa La Moraleda"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                 </div>
@@ -143,12 +147,13 @@ const PortfolioPage = () => {
               <CardBody>
                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                   <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/I4Vftp3-Gg8"
+                     src="https://www.youtube.com/embed/I4Vftp3-Gg8?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa Camelia"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                 </div>
@@ -168,12 +173,13 @@ const PortfolioPage = () => {
               <CardBody>
                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
                   <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/JLiyq1DJCHQ"
+                     src="https://www.youtube.com/embed/JLiyq1DJCHQ?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Fiesta Santa Angelo"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                 </div>
@@ -193,12 +199,13 @@ const PortfolioPage = () => {
                <CardBody>
                  <div className="aspect-video rounded-lg overflow-hidden mb-4">
                     <iframe
+                      className="w-full h-full relative z-20"
                       width="100%"
                       height="100%"
-                      src="https://www.youtube.com/embed/bvauiim7yzw"
+                      src="https://www.youtube.com/embed/bvauiim7yzw?rel=0&playsinline=1&controls=1&modestbranding=1"
                       title="Villa Cortijo Maza"
                       frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                       allowFullScreen
                     ></iframe>
                  </div>
@@ -218,12 +225,13 @@ const PortfolioPage = () => {
                <CardBody>
                  <div className="aspect-video rounded-lg overflow-hidden mb-4">
                    <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/TsNCYGurxDE"
+                     src="https://www.youtube.com/embed/TsNCYGurxDE?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa Verdolaga"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                  </div>
@@ -243,12 +251,13 @@ const PortfolioPage = () => {
                <CardBody>
                  <div className="aspect-video rounded-lg overflow-hidden mb-4">
                    <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/-SNCQ9TY_5A"
+                     src="https://www.youtube.com/embed/-SNCQ9TY_5A?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Colegio Maravillas"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                  </div>
@@ -268,12 +277,13 @@ const PortfolioPage = () => {
                <CardBody>
                  <div className="aspect-video rounded-lg overflow-hidden mb-4">
                    <iframe
+                     className="w-full h-full relative z-20"
                      width="100%"
                      height="100%"
-                     src="https://www.youtube.com/embed/Ew-3-vLgOys"
+                     src="https://www.youtube.com/embed/Ew-3-vLgOys?rel=0&playsinline=1&controls=1&modestbranding=1"
                      title="Villa Velázquez FPV"
                      frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
                    ></iframe>
                  </div>
