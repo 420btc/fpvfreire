@@ -129,7 +129,7 @@ const NavbarComponent = () => {
             </RouterLink>
             <RouterLink 
               to="/portfolio" 
-              className="text-orange-500 text-lg font-medium py-2 hover:text-orange-400 transition-colors"
+              className="text-white text-lg font-medium py-2 hover:text-orange-500 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Portfolio
