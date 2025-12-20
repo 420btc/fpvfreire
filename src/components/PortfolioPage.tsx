@@ -271,7 +271,7 @@ const PortfolioPage = () => {
                </div>
                <CardHeader className="pb-0">
                  <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Velázquez FPV
+                   Villa Velázquez
                  </h3>
                </CardHeader>
                <CardBody>
@@ -281,7 +281,7 @@ const PortfolioPage = () => {
                      width="100%"
                      height="100%"
                      src="https://www.youtube.com/embed/Ew-3-vLgOys?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Velázquez FPV"
+                     title="Villa Velázquez"
                      frameBorder="0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                      allowFullScreen
