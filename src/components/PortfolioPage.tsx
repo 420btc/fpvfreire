@@ -290,20 +290,30 @@ const PortfolioPage = () => {
                </CardBody>
              </Card>
 
-            {/* Video 11 - Coming Soon */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            {/* Video 11 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+               <div className="absolute top-3 right-3 z-10">
+                 <FaHome className="text-orange-500 text-xl" />
+               </div>
                <CardHeader className="pb-0">
                  <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Coming Soon
+                   Villa Pradera
                  </h3>
                </CardHeader>
                <CardBody>
-                 <div className="aspect-video bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4">
-                   <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">
-                     Próximamente
-                   </p>
+                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
+                   <iframe
+                     className="w-full h-full relative z-20"
+                     width="100%"
+                     height="100%"
+                     src="https://www.youtube.com/embed/motZZkuDjf4?rel=0&playsinline=1&controls=1&modestbranding=1"
+                     title="Villa Pradera"
+                     frameBorder="0"
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                     allowFullScreen
+                   ></iframe>
                  </div>
-                </CardBody>
+               </CardBody>
              </Card>
 
             {/* Video 12 - Coming Soon */}
