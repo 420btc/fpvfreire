@@ -30,8 +30,8 @@ const equipmentCategories = [
     description: 'Mi flota de drones FPV para grabaciones aéreas',
     items: [
       {
-        name: 'Cinelog 25 V2 DJI O3',
-        specs: 'Cinewhoop 2.5", 4K/120fps, DJI O3',
+        name: 'Cinelog 30 V3 DJI O4 Pro',
+        specs: 'Cinewhoop 3", 4K/120fps, DJI O4 Pro',
         icon: <FaPlane className="text-2xl text-orange-400" />
       },
       {

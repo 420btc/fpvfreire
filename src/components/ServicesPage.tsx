@@ -16,7 +16,7 @@ const servicesData = [
     title: "Edificios/Construcciones",
     description: "Perspectivas únicas de obras y proyectos arquitectónicos. Documentación del progreso de construcción desde ángulos imposibles de conseguir desde tierra.",
     image: "/images/construccion.jpg",
-    price: "Desde 75€",
+    price: "Desde 90€",
     features: ["Seguimiento de obra", "Inspección técnica", "Documentación HD"]
   },
   {
@@ -27,10 +27,10 @@ const servicesData = [
     features: ["Cobertura completa", "Video en directo", "Edición el mismo día"]
   },
   {
-    title: "Colegios",
+    title: "Colegios e Instituciones",
     description: "Servicios especializados para centros educativos. Documentación de instalaciones, eventos deportivos y actividades académicas desde una perspectiva única.",
     image: "/images/colegio.jpg",
-    price: "Desde 200€",
+    price: "Desde 250€",
     features: ["Documentación escolar", "Eventos deportivos", "Promoción institucional"]
   },
   {
