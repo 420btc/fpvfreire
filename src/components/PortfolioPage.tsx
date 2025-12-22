@@ -125,7 +125,7 @@ const PortfolioPage = () => {
                     <iframe
                        className="w-full h-full object-cover"
                        src="https://www.youtube.com/embed/I4Vftp3-Gg8?rel=0&playsinline=1&controls=1&modestbranding=1"
-                       title="Villa Camelia"
+                       title="Villa Camelia 2"
                        frameBorder="0"
                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                        allowFullScreen
@@ -136,7 +136,7 @@ const PortfolioPage = () => {
                  </div>
                  <div className="p-4">
                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-                     Villa Camelia
+                     Villa Camelia 2
                    </h3>
                  </div>
                </CardBody>
