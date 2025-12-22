@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 import { FaHome, FaGlassCheers, FaBuilding } from 'react-icons/fa';
 
 const PortfolioPage = () => {
@@ -18,7 +18,7 @@ const PortfolioPage = () => {
 
       {/* Portfolio Content */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-[1600px]">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
               Galería de Videos
@@ -31,306 +31,284 @@ const PortfolioPage = () => {
           {/* Videos Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Video 1 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Aurora
-                 </h3>
-               </CardHeader>
-              <CardBody>
-                <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                  <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/Wc61WUZAiFE?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Aurora"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
-                </div>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/Wc61WUZAiFE?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Aurora"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Aurora
+                   </h3>
+                 </div>
                </CardBody>
             </Card>
 
             {/* Video 2 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Camelia
-                 </h3>
-               </CardHeader>
-              <CardBody>
-                <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                  <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/v3Stsgpk55g?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Camelia"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
-                </div>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/v3Stsgpk55g?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Camelia"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Camelia
+                   </h3>
+                 </div>
                </CardBody>
             </Card>
 
             {/* Video 3 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Coto
-                 </h3>
-               </CardHeader>
-              <CardBody>
-                <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                  <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/p5nh2fKd8kg?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Coto"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
-                </div>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/p5nh2fKd8kg?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Coto"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Coto
+                   </h3>
+                 </div>
                </CardBody>
             </Card>
 
             {/* Video 4 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa La Moraleda
-                 </h3>
-               </CardHeader>
-              <CardBody>
-                <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                  <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/lfafRB6PlU8?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa La Moraleda"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
-                </div>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/lfafRB6PlU8?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa La Moraleda"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa La Moraleda
+                   </h3>
+                 </div>
                </CardBody>
             </Card>
 
             {/* Video 5 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Camelia
-                 </h3>
-               </CardHeader>
-              <CardBody>
-                <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                  <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/I4Vftp3-Gg8?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Camelia"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
-                </div>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/I4Vftp3-Gg8?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Camelia"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Camelia
+                   </h3>
+                 </div>
                </CardBody>
             </Card>
 
             {/* Video 6 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaGlassCheers className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Fiesta Santa Angelo
-                 </h3>
-               </CardHeader>
-              <CardBody>
-                <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                  <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/JLiyq1DJCHQ?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Fiesta Santa Angelo"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
-                </div>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/JLiyq1DJCHQ?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Fiesta Santa Angelo"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaGlassCheers className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Fiesta Santa Angelo
+                   </h3>
+                 </div>
                </CardBody>
             </Card>
 
             {/* Video 7 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Cortijo Maza
-                 </h3>
-               </CardHeader>
-               <CardBody>
-                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
                     <iframe
-                      className="w-full h-full relative z-20"
-                      width="100%"
-                      height="100%"
-                      src="https://www.youtube.com/embed/bvauiim7yzw?rel=0&playsinline=1&controls=1&modestbranding=1"
-                      title="Villa Cortijo Maza"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                      allowFullScreen
-                    ></iframe>
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/bvauiim7yzw?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Cortijo Maza"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
                  </div>
-                </CardBody>
-             </Card>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Cortijo Maza
+                   </h3>
+                 </div>
+               </CardBody>
+            </Card>
 
             {/* Video 8 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Verdolaga
-                 </h3>
-               </CardHeader>
-               <CardBody>
-                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                   <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/TsNCYGurxDE?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Verdolaga"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/TsNCYGurxDE?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Verdolaga"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Verdolaga
+                   </h3>
                  </div>
                </CardBody>
-             </Card>
+            </Card>
 
             {/* Video 9 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaBuilding className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Colegio Maravillas
-                 </h3>
-               </CardHeader>
-               <CardBody>
-                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                   <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/pDamDdKDBdk?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Colegio Maravillas"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/pDamDdKDBdk?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Colegio Maravillas"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaBuilding className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Colegio Maravillas
+                   </h3>
                  </div>
                </CardBody>
-             </Card>
+            </Card>
 
             {/* Video 10 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Velázquez
-                 </h3>
-               </CardHeader>
-               <CardBody>
-                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                   <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/Ew-3-vLgOys?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Velázquez"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/Ew-3-vLgOys?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Velázquez"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Velázquez
+                   </h3>
                  </div>
                </CardBody>
-             </Card>
+            </Card>
 
             {/* Video 11 */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
-               <div className="absolute top-3 right-3 z-10">
-                 <FaHome className="text-orange-500 text-xl" />
-               </div>
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Villa Pradera
-                 </h3>
-               </CardHeader>
-               <CardBody>
-                 <div className="aspect-video rounded-lg overflow-hidden mb-4">
-                   <iframe
-                     className="w-full h-full relative z-20"
-                     width="100%"
-                     height="100%"
-                     src="https://www.youtube.com/embed/motZZkuDjf4?rel=0&playsinline=1&controls=1&modestbranding=1"
-                     title="Villa Pradera"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                     allowFullScreen
-                   ></iframe>
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full">
+                    <iframe
+                       className="w-full h-full object-cover"
+                       src="https://www.youtube.com/embed/motZZkuDjf4?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Pradera"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Villa Pradera
+                   </h3>
                  </div>
                </CardBody>
-             </Card>
+            </Card>
 
             {/* Video 12 - Coming Soon */}
-             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
-               <CardHeader className="pb-0">
-                 <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-                   Coming Soon
-                 </h3>
-               </CardHeader>
-               <CardBody>
-                 <div className="aspect-video bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4">
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden h-full flex flex-col">
+                 <div className="aspect-video bg-gray-200 dark:bg-gray-800 flex items-center justify-center w-full">
                    <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">
                      Próximamente
                    </p>
                  </div>
-                </CardBody>
-             </Card>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Coming Soon
+                   </h3>
+                 </div>
+               </CardBody>
+            </Card>
           </div>
 
           {/* Call to Action */}
