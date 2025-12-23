@@ -289,8 +289,13 @@ const PortfolioPage = () => {
             {/* Video 12 - Coming Soon */}
              <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
                <CardBody className="p-0 overflow-hidden h-full flex flex-col">
-                 <div className="aspect-video bg-gray-200 dark:bg-gray-800 flex items-center justify-center w-full">
-                   <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">
+                 <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center bg-gray-200 dark:bg-gray-800">
+                   <img 
+                     src="/images/villa_nueva.png" 
+                     alt="Coming Soon Background" 
+                     className="absolute inset-0 w-full h-full object-cover blur-md opacity-60"
+                   />
+                   <p className="relative z-10 text-gray-800 dark:text-white text-lg font-bold bg-white/30 dark:bg-black/30 px-6 py-2 rounded-full backdrop-blur-sm border border-white/20">
                      Próximamente
                    </p>
                  </div>
