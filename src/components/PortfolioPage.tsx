@@ -376,6 +376,79 @@ const PortfolioPage = () => {
             </Card>
           </div>
 
+          {/* Divider 2025 - 2026 */}
+          <div className="relative flex items-center py-12">
+            <div className="flex-grow border-t border-orange-500"></div>
+            <span className="flex-shrink-0 mx-4 text-2xl font-bold text-orange-500">2026</span>
+            <div className="flex-grow border-t border-orange-500"></div>
+          </div>
+
+          {/* 2026 Videos Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {/* Coming Soon 1 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden h-full flex flex-col">
+                 <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center bg-gray-200 dark:bg-gray-800">
+                   <img 
+                     src="/images/villa_nueva.png" 
+                     alt="Coming Soon Background" 
+                     className="absolute inset-0 w-full h-full object-cover blur-md opacity-60"
+                   />
+                   <p className="relative z-10 text-gray-800 dark:text-white text-lg font-bold bg-white/30 dark:bg-black/30 px-6 py-2 rounded-full backdrop-blur-sm border border-white/20">
+                     Próximamente
+                   </p>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Coming Soon
+                   </h3>
+                 </div>
+               </CardBody>
+            </Card>
+
+            {/* Coming Soon 2 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden h-full flex flex-col">
+                 <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center bg-gray-200 dark:bg-gray-800">
+                   <img 
+                     src="/images/villa_nueva.png" 
+                     alt="Coming Soon Background" 
+                     className="absolute inset-0 w-full h-full object-cover blur-md opacity-60"
+                   />
+                   <p className="relative z-10 text-gray-800 dark:text-white text-lg font-bold bg-white/30 dark:bg-black/30 px-6 py-2 rounded-full backdrop-blur-sm border border-white/20">
+                     Próximamente
+                   </p>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Coming Soon
+                   </h3>
+                 </div>
+               </CardBody>
+            </Card>
+
+            {/* Coming Soon 3 */}
+             <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
+               <CardBody className="p-0 overflow-hidden h-full flex flex-col">
+                 <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center bg-gray-200 dark:bg-gray-800">
+                   <img 
+                     src="/images/villa_nueva.png" 
+                     alt="Coming Soon Background" 
+                     className="absolute inset-0 w-full h-full object-cover blur-md opacity-60"
+                   />
+                   <p className="relative z-10 text-gray-800 dark:text-white text-lg font-bold bg-white/30 dark:bg-black/30 px-6 py-2 rounded-full backdrop-blur-sm border border-white/20">
+                     Próximamente
+                   </p>
+                 </div>
+                 <div className="p-4">
+                   <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                     Coming Soon
+                   </h3>
+                 </div>
+               </CardBody>
+            </Card>
+          </div>
+
           {/* Call to Action */}
           <div className="text-center mt-16">
             <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white max-w-2xl mx-auto">
