@@ -45,6 +45,12 @@ const ChatBotContact = () => {
     setInputMessage('');
     setIsLoading(true);
 
+    // Preparar el historial de mensajes para el contexto
+    const historyMessages = messages.map(msg => ({
+      role: msg.isUser ? 'user' : 'assistant',
+      content: msg.text
+    }));
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -57,6 +63,7 @@ const ChatBotContact = () => {
               role: 'system',
               content: 'Eres un experto en drones FPV (First Person View) y servicios de grabación aérea. Tu nombre es Carlos y trabajas para Freire FPV. Tienes amplio conocimiento sobre: tipos de drones FPV, técnicas de pilotaje, equipamiento necesario, regulaciones de vuelo, servicios de grabación para bodas, eventos, deportes, inspecciones, publicidad, etc. Responde de manera profesional pero amigable, en español, y siempre enfócate en cómo los drones FPV pueden ayudar al cliente. Si te preguntan sobre precios, menciona que pueden contactar directamente para un presupuesto personalizado.'
             },
+            ...historyMessages,
             {
               role: 'user',
               content: inputMessage
