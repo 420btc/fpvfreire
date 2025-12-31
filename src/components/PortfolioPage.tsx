@@ -61,6 +61,13 @@ const PortfolioPage = () => {
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-[1600px]">
 
+          {/* Divider 2025 */}
+          <div className="relative flex items-center py-12">
+            <div className="flex-grow border-t border-orange-500"></div>
+            <span className="flex-shrink-0 mx-4 text-2xl font-bold text-orange-500">2025</span>
+            <div className="flex-grow border-t border-orange-500"></div>
+          </div>
+
           {/* Videos Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Video 1 */}
