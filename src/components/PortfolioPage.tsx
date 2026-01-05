@@ -359,12 +359,12 @@ const PortfolioPage = () => {
             {/* Video 12 */}
              <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
                <CardBody className="p-0 overflow-hidden">
-                 <div className="relative aspect-video w-full group cursor-pointer" onClick={() => handleVideoClick("https://www.youtube.com/embed/E-SY8CYzjAo?rel=0&playsinline=1&controls=1&modestbranding=1")}>
+                 <div className="relative aspect-video w-full group cursor-pointer" onClick={() => handleVideoClick("https://www.youtube.com/embed/btwl4BI-0Xk?rel=0&playsinline=1&controls=1&modestbranding=1")}>
                     {/* Overlay para click en desktop */}
                     <div className="absolute inset-0 z-20 hidden lg:block bg-transparent"></div>
                     <iframe
                        className="w-full h-full object-cover pointer-events-auto lg:pointer-events-none"
-                       src="https://www.youtube.com/embed/E-SY8CYzjAo?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       src="https://www.youtube.com/embed/btwl4BI-0Xk?rel=0&playsinline=1&controls=1&modestbranding=1"
                        title="Villa Ebano"
                        frameBorder="0"
                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
