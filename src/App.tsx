@@ -33,6 +33,57 @@ const HomePage = () => (
   <main>
     <Hero />
     <About />
+    
+    {/* Videos Destacados */}
+    <section className="py-12 bg-content1">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
+          Proyectos Destacados
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg w-full">
+            <CardBody className="p-0 overflow-hidden">
+              <div className="relative aspect-video w-full">
+                <iframe
+                  className="w-full h-full object-cover"
+                  src="https://www.youtube.com/embed/Ew-3-vLgOys?rel=0&playsinline=1&controls=1&modestbranding=1"
+                  title="Villa Velázquez"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                  Villa Velázquez
+                </h3>
+              </div>
+            </CardBody>
+          </Card>
+          
+          <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg w-full">
+            <CardBody className="p-0 overflow-hidden">
+              <div className="relative aspect-video w-full">
+                <iframe
+                  className="w-full h-full object-cover"
+                  src="https://www.youtube.com/embed/btwl4BI-0Xk?rel=0&playsinline=1&controls=1&modestbranding=1"
+                  title="Villa Ebano"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                  Villa Ebano
+                </h3>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+    </section>
+
     <Services />
     
     {/* Otros Servicios */}
