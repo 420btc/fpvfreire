@@ -1,8 +1,28 @@
-import { Card, CardBody, CardFooter, Button, Input, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/react";
+import { Card, CardBody, CardFooter, Button, Input, Textarea, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Accordion, AccordionItem } from "@heroui/react";
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from "framer-motion";
+
+const faqData = [
+  {
+    question: "¿Entregáis el material en bruto (RAW)?",
+    answer: "Sí, podemos entregar tanto el material editado como los archivos originales en RAW/Log para que tu equipo de edición pueda trabajar con ellos."
+  },
+  {
+    question: "¿Qué ocurre si hace mal tiempo el día de la grabación?",
+    answer: "La seguridad es lo primero. Si llueve o hay vientos fuertes, reprogramaremos la sesión para el siguiente día disponible sin coste adicional."
+  },
+  {
+    question: "¿Es seguro volar en interiores?",
+    answer: "Absolutamente. Utilizamos drones 'Cinewhoop' con protecciones en las hélices diseñados específicamente para volar cerca de personas y objetos sin riesgo."
+  },
+  {
+    question: "¿Gestionáis los permisos de vuelo?",
+    answer: "Sí, somos operadores certificados por AESA y nos encargamos de gestionar todos los permisos y coordinaciones necesarias para volar legalmente."
+  }
+];
 
 const servicesData = [
   {
@@ -165,20 +185,26 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header Section */}
-      <section className="py-16 bg-gradient-to-b from-content1 to-background">
+      <section className="py-16 bg-gradient-to-b from-content1 to-background overflow-hidden">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Nuestros Servicios</h1>
-          <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto mb-8">
-            Descubre todos los servicios que ofrecemos con drones FPV
-          </p>
-          <Link to="/portfolio">
-            <Button 
-              size="lg"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
-            >
-              VER PORTFOLIO
-            </Button>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Nuestros Servicios</h1>
+            <p className="text-lg md:text-xl text-default-600 max-w-3xl mx-auto mb-8">
+              Descubre todos los servicios que ofrecemos con drones FPV
+            </p>
+            <Link to="/portfolio">
+              <Button 
+                size="lg"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3"
+              >
+                VER PORTFOLIO
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -187,65 +213,122 @@ const ServicesPage = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {servicesData.map((service, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <CardBody className="p-0">
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
-                    />
-                    <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      {service.price}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="h-full bg-white/70 dark:bg-black/50 backdrop-blur-md border border-white/20 hover:bg-white/90 dark:hover:bg-black/70 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                  <CardBody className="p-0">
+                    <div className="relative overflow-hidden group">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute top-4 right-4 bg-orange-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                        {service.price}
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                    <p className="text-default-600 mb-4 text-sm leading-relaxed">
-                      {service.description}
-                    </p>
-                    <div className="space-y-2 mb-6">
-                      {service.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center text-sm">
-                          <Icon icon="lucide:check" className="text-orange-500 mr-2" width={16} />
-                          <span className="text-default-700">{feature}</span>
-                        </div>
-                      ))}
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold mb-3 text-orange-600 dark:text-orange-500">{service.title}</h3>
+                      <p className="text-default-600 mb-4 text-sm leading-relaxed">
+                        {service.description}
+                      </p>
+                      <div className="space-y-2 mb-6">
+                        {service.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-center text-sm">
+                            <Icon icon="lucide:check" className="text-orange-500 mr-2" width={16} />
+                            <span className="text-default-700">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </CardBody>
-                <CardFooter className="pt-0 px-6 pb-6">
-                  <Button 
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
-                    size="lg"
-                    onPress={() => handleServiceRequest(service.title)}
-                  >
-                    SOLICITAR
-                  </Button>
-                </CardFooter>
-              </Card>
+                  </CardBody>
+                  <CardFooter className="pt-0 px-6 pb-6 mt-auto">
+                    <Button 
+                      className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-md hover:shadow-lg"
+                      size="lg"
+                      onPress={() => handleServiceRequest(service.title)}
+                    >
+                      SOLICITAR
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* How We Work Section */}
-      <section className="py-16 bg-content1">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">¿Cómo trabajamos?</h2>
+      <section className="py-16 bg-content1 relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.h2 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold text-center mb-12"
+          >
+            ¿Cómo trabajamos?
+          </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {workflowSteps.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-orange-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              <motion.div 
+                key={index} 
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <div className="w-16 h-16 bg-orange-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg">
                   {step.number}
                 </div>
                 <h3 className="text-xl font-bold mb-3">{step.title}</h3>
                 <p className="text-default-600 text-sm leading-relaxed">
                   {step.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-bold text-center mb-12"
+          >
+            Preguntas Frecuentes
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <Accordion variant="splitted">
+              {faqData.map((faq, index) => (
+                <AccordionItem 
+                  key={index} 
+                  aria-label={faq.question} 
+                  title={faq.question}
+                  className="mb-2"
+                >
+                  <p className="text-default-600 pb-4">
+                    {faq.answer}
+                  </p>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </motion.div>
         </div>
       </section>
 
