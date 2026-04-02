@@ -418,22 +418,27 @@ const PortfolioPage = () => {
                </CardBody>
             </Card>
 
-            {/* Coming Soon 2 */}
+            {/* Villa Sunset */}
              <Card className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300 w-full">
-               <CardBody className="p-0 overflow-hidden h-full flex flex-col">
-                 <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center bg-gray-200 dark:bg-gray-800">
-                   <img 
-                     src="/images/villa_nueva.png" 
-                     alt="Coming Soon Background" 
-                     className="absolute inset-0 w-full h-full object-cover blur-md opacity-60"
-                   />
-                   <p className="relative z-10 text-gray-800 dark:text-white text-lg font-bold bg-white/30 dark:bg-black/30 px-6 py-2 rounded-full backdrop-blur-sm border border-white/20">
-                     Próximamente
-                   </p>
+               <CardBody className="p-0 overflow-hidden">
+                 <div className="relative aspect-video w-full group cursor-pointer" onClick={() => handleVideoClick("https://www.youtube.com/embed/yNWXUJhGYNU?rel=0&playsinline=1&controls=1&modestbranding=1")}>
+                    {/* Overlay para click en desktop */}
+                    <div className="absolute inset-0 z-20 hidden lg:block bg-transparent"></div>
+                    <iframe
+                       className="w-full h-full object-cover pointer-events-auto lg:pointer-events-none"
+                       src="https://www.youtube.com/embed/yNWXUJhGYNU?rel=0&playsinline=1&controls=1&modestbranding=1"
+                       title="Villa Sunset"
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                       allowFullScreen
+                     ></iframe>
+                     <div className="absolute top-3 right-3 z-30 bg-black/50 p-2 rounded-full backdrop-blur-sm pointer-events-none">
+                       <FaHome className="text-orange-500 text-lg" />
+                     </div>
                  </div>
                  <div className="p-4">
                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-                     Coming Soon
+                     Villa Sunset
                    </h3>
                  </div>
                </CardBody>
