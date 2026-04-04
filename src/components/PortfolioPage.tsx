@@ -27,7 +27,7 @@ const PortfolioPage = () => {
           <div className="relative w-full max-w-5xl aspect-video rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
             <iframe
               className="w-full h-full"
-              src={`${selectedVideo}&autoplay=1`}
+              src={`${selectedVideo}&autoplay=1&vq=hd1080`}
               title="Video Preview"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
